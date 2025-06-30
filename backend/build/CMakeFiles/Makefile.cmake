@@ -7,10 +7,16 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/CMakeLists.txt"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/CMakeLists.txt"
   "CMakeFiles/4.0.3/CMakeCCompiler.cmake"
   "CMakeFiles/4.0.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/4.0.3/CMakeSystem.cmake"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/path/to/venv/lib/python3.13/site-packages/pybind11/share/cmake/pybind11/FindPythonLibsNew.cmake"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/path/to/venv/lib/python3.13/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/path/to/venv/lib/python3.13/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/path/to/venv/lib/python3.13/site-packages/pybind11/share/cmake/pybind11/pybind11ConfigVersion.cmake"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/path/to/venv/lib/python3.13/site-packages/pybind11/share/cmake/pybind11/pybind11Targets.cmake"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/path/to/venv/lib/python3.13/site-packages/pybind11/share/cmake/pybind11/pybind11Tools.cmake"
   "/opt/homebrew/share/cmake/Modules/CMakeCCompiler.cmake.in"
   "/opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c"
   "/opt/homebrew/share/cmake/Modules/CMakeCInformation.cmake"
@@ -130,12 +136,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/homebrew/share/cmake/Modules/Platform/Linker/Apple-AppleClang-CXX.cmake"
   "/opt/homebrew/share/cmake/Modules/Platform/Linker/Apple-AppleClang.cmake"
   "/opt/homebrew/share/cmake/Modules/Platform/UnixPaths.cmake"
-  "/opt/homebrew/share/cmake/pybind11/FindPythonLibsNew.cmake"
-  "/opt/homebrew/share/cmake/pybind11/pybind11Common.cmake"
-  "/opt/homebrew/share/cmake/pybind11/pybind11Config.cmake"
-  "/opt/homebrew/share/cmake/pybind11/pybind11ConfigVersion.cmake"
-  "/opt/homebrew/share/cmake/pybind11/pybind11Targets.cmake"
-  "/opt/homebrew/share/cmake/pybind11/pybind11Tools.cmake"
   )
 
 # The corresponding makefile is:

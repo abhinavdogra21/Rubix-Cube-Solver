@@ -53,10 +53,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend"
+CMAKE_SOURCE_DIR = /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build"
+CMAKE_BINARY_DIR = /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/kociemba_lib.dir/depend.make
@@ -73,18 +73,18 @@ CMakeFiles/kociemba_lib.dir/codegen:
 .PHONY : CMakeFiles/kociemba_lib.dir/codegen
 
 CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o: CMakeFiles/kociemba_lib.dir/flags.make
-CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o: /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app\ (github)\ /backend/kociemba_api/src/kociemba_solver.cpp
+CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o: /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/kociemba_api/src/kociemba_solver.cpp
 CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o: CMakeFiles/kociemba_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o -MF CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o.d -o CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o -c "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/kociemba_api/src/kociemba_solver.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o -MF CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o.d -o CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o -c /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/kociemba_api/src/kociemba_solver.cpp
 
 CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/kociemba_api/src/kociemba_solver.cpp" > CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/kociemba_api/src/kociemba_solver.cpp > CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.i
 
 CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/kociemba_api/src/kociemba_solver.cpp" -o CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/kociemba_api/src/kociemba_solver.cpp -o CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.s
 
 # Object files for target kociemba_lib
 kociemba_lib_OBJECTS = \
@@ -96,7 +96,7 @@ kociemba_lib_EXTERNAL_OBJECTS =
 libkociemba_lib.a: CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o
 libkociemba_lib.a: CMakeFiles/kociemba_lib.dir/build.make
 libkociemba_lib.a: CMakeFiles/kociemba_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libkociemba_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libkociemba_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/kociemba_lib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kociemba_lib.dir/link.txt --verbose=$(VERBOSE)
 
@@ -109,6 +109,6 @@ CMakeFiles/kociemba_lib.dir/clean:
 .PHONY : CMakeFiles/kociemba_lib.dir/clean
 
 CMakeFiles/kociemba_lib.dir/depend:
-	cd "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend" "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend" "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build" "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build" "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles/kociemba_lib.dir/DependInfo.cmake" "--color=$(COLOR)"
+	cd /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles/kociemba_lib.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/kociemba_lib.dir/depend
 

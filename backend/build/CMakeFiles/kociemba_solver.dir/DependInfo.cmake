@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/kociemba_api/src/kociemba_wrapper.cpp" "CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.o" "gcc" "CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.o.d"
+  "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/kociemba_api/src/kociemba_wrapper.cpp" "CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.o" "gcc" "CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
