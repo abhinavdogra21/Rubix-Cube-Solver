@@ -1,0 +1,2 @@
+/usr/bin/ar qc libkociemba_lib.a CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o
+/usr/bin/ranlib libkociemba_lib.a
