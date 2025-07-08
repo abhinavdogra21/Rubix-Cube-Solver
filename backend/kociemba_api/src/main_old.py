@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Flask API for Enhanced Kociemba Rubik's Cube Solver
-Updated with proper state management and session handling
+Flask API for Kociemba Rubik's Cube Solver
 """
 
 import os
@@ -38,15 +37,8 @@ def index():
     """Health check endpoint"""
     return jsonify({
         'status': 'ok',
-        'message': 'Enhanced Kociemba Rubik\'s Cube Solver API',
-        'kociemba_available': KOCIEMBA_AVAILABLE,
-        'version': '2.0',
-        'features': [
-            'Session management',
-            'Proper state tracking',
-            'Kociemba algorithm integration',
-            'Localhost deployment optimized'
-        ]
+        'message': 'Kociemba Rubik\'s Cube Solver API',
+        'kociemba_available': KOCIEMBA_AVAILABLE
     })
 
 @app.route('/api/scramble', methods=['GET'])
@@ -105,10 +97,7 @@ def api_solve_cube():
             }), 400
         
         cube_state = data['cube_state']
-        session_id = data.get('session_id', 'default')
-        
         print(f"Received cube state: {cube_state}")
-        print(f"Session ID: {session_id}")
         print(f"Cube state length: {len(cube_state)}")
         print(f"Cube state characters: {set(cube_state)}")
         
@@ -128,7 +117,7 @@ def api_solve_cube():
                 }), 400
             
             try:
-                solution = solve_cube(cube_state, session_id)
+                solution = solve_cube(cube_state)
                 print(f"Solution result: {solution}")
             except Exception as solve_error:
                 print(f"Solve error: {solve_error}")
@@ -145,8 +134,7 @@ def api_solve_cube():
             
             return jsonify({
                 'success': True,
-                'solution': solution,
-                'session_id': session_id
+                'solution': solution
             })
         else:
             return jsonify({
@@ -172,14 +160,11 @@ def api_solve_scramble():
             }), 400
         
         scramble = data['scramble']
-        session_id = data.get('session_id', 'default')
-        
         print(f"Received scramble: {scramble}")
-        print(f"Session ID: {session_id}")
         
         if KOCIEMBA_AVAILABLE:
             try:
-                solution = solve_scramble(scramble, session_id)
+                solution = solve_scramble(scramble)
                 print(f"Scramble solution result: {solution}")
             except Exception as solve_error:
                 print(f"Scramble solve error: {solve_error}")
@@ -196,8 +181,7 @@ def api_solve_scramble():
             
             return jsonify({
                 'success': True,
-                'solution': solution,
-                'session_id': session_id
+                'solution': solution
             })
         else:
             # Fallback: simple inverse-move solver
@@ -220,8 +204,7 @@ def api_solve_scramble():
                 solution = ' '.join(solution_moves)
                 return jsonify({
                     'success': True,
-                    'solution': solution,
-                    'session_id': session_id
+                    'solution': solution
                 })
             except Exception as fallback_error:
                 return jsonify({
@@ -233,58 +216,6 @@ def api_solve_scramble():
         return jsonify({
             'success': False,
             'error': f'Internal server error: {str(e)}'
-        }), 500
-
-@app.route('/api/session/clear', methods=['POST'])
-def api_clear_session():
-    """Clear a session's state"""
-    try:
-        data = request.get_json() or {}
-        session_id = data.get('session_id', 'default')
-        
-        if KOCIEMBA_AVAILABLE:
-            clear_session(session_id)
-            return jsonify({
-                'success': True,
-                'message': f'Session {session_id} cleared',
-                'session_id': session_id
-            })
-        else:
-            return jsonify({
-                'success': True,
-                'message': 'Session cleared (fallback mode)',
-                'session_id': session_id
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': f'Failed to clear session: {str(e)}'
-        }), 500
-
-@app.route('/api/session/info', methods=['GET'])
-def api_session_info():
-    """Get session information"""
-    try:
-        session_id = request.args.get('session_id', 'default')
-        
-        if KOCIEMBA_AVAILABLE:
-            info = get_session_info(session_id)
-            return jsonify({
-                'success': True,
-                'session_info': info
-            })
-        else:
-            return jsonify({
-                'success': True,
-                'session_info': {
-                    'session_id': session_id,
-                    'message': 'Session info not available in fallback mode'
-                }
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': f'Failed to get session info: {str(e)}'
         }), 500
 
 @app.route('/api/validate', methods=['POST'])
@@ -331,7 +262,6 @@ def api_validate_cube():
             'error': str(e)
         }), 500
 
-# Legacy endpoint for backward compatibility
 @app.route('/solve', methods=['POST'])
 def solve():
     try:
@@ -349,8 +279,5 @@ def solve():
         return jsonify({'error': 'Internal server error: ' + str(e)}), 500
 
 if __name__ == '__main__':
-    print("Starting Enhanced Kociemba Rubik's Cube Solver API...")
-    print(f"Kociemba available: {KOCIEMBA_AVAILABLE}")
-    print("Server optimized for localhost deployment")
-    app.run(debug=True, port=5001, host='0.0.0.0')
+    app.run(debug=True, port=5002, host='0.0.0.0')
 
