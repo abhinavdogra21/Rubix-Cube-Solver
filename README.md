@@ -12,7 +12,7 @@
 - **Video Detection**: (Experimental) Detect cube state from your camera
 - **Cross-platform**: Works on macOS and Windows
 
-https://github.com/abhinavdogra21/Rubix-Cube-Solver/blob/main/rubix_cube_demo-VEED.mp4
+  <video src="https://github.com/abhinavdogra21/Rubix-Cube-Solver/blob/main/rubix_cube_demo-VEED.mp4?raw=true" controls width="700"></video>
 
 ## ⚠️ Before You Start: Clean Clone & Common Build Issues
 
