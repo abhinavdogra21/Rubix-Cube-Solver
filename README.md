@@ -1,3 +1,5 @@
+
+
 # 3D Interactive Rubik's Cube Solver
 
 ## ✨ Features
@@ -9,6 +11,8 @@
 - **Manual Cube Configuration**: Set up any cube state with validation
 - **Video Detection**: (Experimental) Detect cube state from your camera
 - **Cross-platform**: Works on macOS and Windows
+
+https://github.com/abhinavdogra21/Rubix-Cube-Solver/blob/main/rubix_cube_demo-VEED.mp4
 
 ## ⚠️ Before You Start: Clean Clone & Common Build Issues
 
