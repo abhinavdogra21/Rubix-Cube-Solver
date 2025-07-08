@@ -90,17 +90,13 @@ function App() {
 
   const handleApplyScramble = async () => {
     if (!scrambleInput.trim()) return;
-    
     setIsLoading(true);
-    setCurrentScramble(''); // Clear currentScramble to indicate manual config or new scramble
     setSolution('');
-    
     try {
       // Create new cube state and apply scramble
       const newCubeState = new CubeState();
       newCubeState.applyMoves(scrambleInput);
       setCubeStateValue(newCubeState);
-      
       // Update 3D visualization
       if (cubeRef.current) {
         cubeRef.current.updateCubeState(newCubeState);
@@ -111,6 +107,17 @@ function App() {
       console.error('Apply scramble failed:', error);
     } finally {
       setTimeout(() => setIsLoading(false), 1000);
+    }
+  };
+
+  // When manual configuration is used, clear scramble and currentScramble
+  const handleCubeStateChange = (newCubeState) => {
+    setCubeStateValue(newCubeState);
+    setScrambleInput(''); // Clear scramble input
+    setCurrentScramble(''); // Clear scramble
+    setSolution('');
+    if (cubeRef.current) {
+      cubeRef.current.updateCubeState(newCubeState);
     }
   };
 
@@ -378,16 +385,6 @@ function App() {
     setCubeStateValue(newCubeState);
     setScrambleInput('');
     setCurrentScramble('');
-    setSolution('');
-    
-    if (cubeRef.current) {
-      cubeRef.current.updateCubeState(newCubeState);
-    }
-  };
-
-  const handleCubeStateChange = (newCubeState) => {
-    setCubeStateValue(newCubeState);
-    setCurrentScramble(''); // Clear scramble when manually configuring
     setSolution('');
     
     if (cubeRef.current) {
