@@ -105,7 +105,5 @@ Frontend: http://localhost:5173
 
 For more help, see comments in the code or open an issue.
 
-## 📄 License
 
-MIT License.
 
