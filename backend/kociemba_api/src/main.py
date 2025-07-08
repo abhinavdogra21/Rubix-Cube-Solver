@@ -12,7 +12,7 @@ from flask_cors import CORS
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 try:
-    from kociemba_wrapper import solve_cube, solve_scramble, generate_scramble, is_valid_cube, scramble_to_cube_string
+    from kociemba_wrapper_fixed import solve_cube, solve_scramble, generate_scramble, is_valid_cube, scramble_to_cube_string
     KOCIEMBA_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Could not import Kociemba wrapper: {e}")
@@ -39,13 +39,28 @@ def api_generate_scramble():
     """Generate a random scramble"""
     try:
         if KOCIEMBA_AVAILABLE:
-            scramble = generate_scramble()
-            cube_state = scramble_to_cube_string(scramble)
-            return jsonify({
-                'success': True,
-                'scramble': scramble,
-                'cube_state': cube_state
-            })
+            try:
+                scramble = generate_scramble()
+                print(f"Generated scramble: {scramble}")
+                cube_state = scramble_to_cube_string(scramble)
+                print(f"Generated cube state: {cube_state}")
+                return jsonify({
+                    'success': True,
+                    'scramble': scramble,
+                    'cube_state': cube_state
+                })
+            except Exception as generation_error:
+                print(f"Scramble generation error: {generation_error}")
+                # Fallback scramble generation
+                import random
+                moves = ['U', "U'", 'U2', 'R', "R'", 'R2', 'F', "F'", 'F2', 
+                        'D', "D'", 'D2', 'L', "L'", 'L2', 'B', "B'", 'B2']
+                scramble = ' '.join(random.choices(moves, k=25))
+                return jsonify({
+                    'success': True,
+                    'scramble': scramble,
+                    'cube_state': '000000000111111111222222222333333333444444444555555555'
+                })
         else:
             # Fallback scramble generation
             import random
@@ -58,6 +73,7 @@ def api_generate_scramble():
                 'cube_state': '000000000111111111222222222333333333444444444555555555'
             })
     except Exception as e:
+        print(f"General scramble generation error: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)
@@ -73,29 +89,43 @@ def api_solve_cube():
                 'success': False,
                 'error': 'Missing cube_state parameter'
             }), 400
+        
         cube_state = data['cube_state']
         print(f"Received cube state: {cube_state}")
         print(f"Cube state length: {len(cube_state)}")
         print(f"Cube state characters: {set(cube_state)}")
+        
         if KOCIEMBA_AVAILABLE:
             # Validate cube state first
-            if not is_valid_cube(cube_state):
+            try:
+                if not is_valid_cube(cube_state):
+                    return jsonify({
+                        'success': False,
+                        'error': 'Invalid cube state: The cube configuration is not valid or solvable'
+                    }), 400
+            except Exception as validation_error:
+                print(f"Validation error: {validation_error}")
                 return jsonify({
                     'success': False,
-                    'error': 'Invalid cube state: The cube configuration is not valid or solvable'
+                    'error': f'Validation error: {str(validation_error)}'
                 }), 400
+            
             try:
                 solution = solve_cube(cube_state)
-            except Exception as e:
+                print(f"Solution result: {solution}")
+            except Exception as solve_error:
+                print(f"Solve error: {solve_error}")
                 return jsonify({
                     'success': False,
-                    'error': f'Internal solver error: {str(e)}'
-                }), 400
+                    'error': f'Internal solver error: {str(solve_error)}'
+                }), 500
+            
             if solution.startswith('Error:'):
                 return jsonify({
                     'success': False,
                     'error': solution
                 }), 400
+            
             return jsonify({
                 'success': True,
                 'solution': solution
@@ -106,7 +136,7 @@ def api_solve_cube():
                 'error': 'Kociemba solver not available'
             }), 503
     except Exception as e:
-        print(f"Solve error: {str(e)}")
+        print(f"General solve error: {str(e)}")
         return jsonify({
             'success': False,
             'error': f'Internal server error: {str(e)}'
@@ -122,42 +152,61 @@ def api_solve_scramble():
                 'success': False,
                 'error': 'Missing scramble parameter'
             }), 400
+        
         scramble = data['scramble']
+        print(f"Received scramble: {scramble}")
+        
         if KOCIEMBA_AVAILABLE:
             try:
                 solution = solve_scramble(scramble)
-            except Exception as e:
+                print(f"Scramble solution result: {solution}")
+            except Exception as solve_error:
+                print(f"Scramble solve error: {solve_error}")
                 return jsonify({
                     'success': False,
-                    'error': f'Internal solver error: {str(e)}'
+                    'error': f'Internal solver error: {str(solve_error)}'
+                }), 500
+            
+            if solution.startswith('Error:'):
+                return jsonify({
+                    'success': False,
+                    'error': solution
                 }), 400
+            
             return jsonify({
                 'success': True,
                 'solution': solution
             })
         else:
             # Fallback: simple inverse-move solver
-            move_inverses = {
-                'U': "U'", "U'": 'U', 'U2': 'U2',
-                'R': "R'", "R'": 'R', 'R2': 'R2',
-                'F': "F'", "F'": 'F', 'F2': 'F2',
-                'D': "D'", "D'": 'D', 'D2': 'D2',
-                'L': "L'", "L'": 'L', 'L2': 'L2',
-                'B': "B'", "B'": 'B', 'B2': 'B2'
-            }
-            moves = scramble.split()
-            solution_moves = []
-            for move in reversed(moves):
-                if move in move_inverses:
-                    solution_moves.append(move_inverses[move])
-                else:
-                    solution_moves.append(move)
-            solution = ' '.join(solution_moves)
-            return jsonify({
-                'success': True,
-                'solution': solution
-            })
+            try:
+                move_inverses = {
+                    'U': "U'", "U'": 'U', 'U2': 'U2',
+                    'R': "R'", "R'": 'R', 'R2': 'R2',
+                    'F': "F'", "F'": 'F', 'F2': 'F2',
+                    'D': "D'", "D'": 'D', 'D2': 'D2',
+                    'L': "L'", "L'": 'L', 'L2': 'L2',
+                    'B': "B'", "B'": 'B', 'B2': 'B2'
+                }
+                moves = scramble.split()
+                solution_moves = []
+                for move in reversed(moves):
+                    if move in move_inverses:
+                        solution_moves.append(move_inverses[move])
+                    else:
+                        solution_moves.append(move)
+                solution = ' '.join(solution_moves)
+                return jsonify({
+                    'success': True,
+                    'solution': solution
+                })
+            except Exception as fallback_error:
+                return jsonify({
+                    'success': False,
+                    'error': f'Fallback solver error: {str(fallback_error)}'
+                }), 500
     except Exception as e:
+        print(f"General scramble solve error: {str(e)}")
         return jsonify({
             'success': False,
             'error': f'Internal server error: {str(e)}'
@@ -224,5 +273,5 @@ def solve():
         return jsonify({'error': 'Internal server error: ' + str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5002, host='0.0.0.0')
 
