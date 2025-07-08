@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: rubix-cube-solver
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn backend.kociemba_api.main:app
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
