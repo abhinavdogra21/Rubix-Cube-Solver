@@ -3,7 +3,10 @@ services:
     name: rubix-cube-solver
     env: python
     buildCommand: ./build.sh
-    startCommand: gunicorn backend.kociemba_api.main:app
+    startCommand: gunicorn backend.kociemba_api.src.main:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: PYTHONPATH
+        value: "/opt/render/project/src/backend/kociemba_api/src"
+
