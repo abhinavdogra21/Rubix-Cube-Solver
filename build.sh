@@ -11,4 +11,8 @@ pip install -r backend/kociemba_api/requirements.txt
 # Build the C++ extension
 cd backend/kociemba_api
 python3 setup.py build_ext --inplace
+
+# Copy the built .so file to src/ so the Python wrapper can find it
+find . -name 'kociemba_solver*.so' -exec cp {} src/ \;
+
 cd ../..
