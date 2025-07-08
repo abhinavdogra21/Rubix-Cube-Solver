@@ -240,7 +240,7 @@ function App() {
     setIsLoading(true);
     try {
       if (apiStatus === 'available') {
-        // Try backend solver first
+        // Try backend solver only
         const endpoint = effectiveScramble ? '/api/solve_scramble' : '/api/solve';
         const payload = effectiveScramble 
           ? { scramble: effectiveScramble } 
@@ -265,46 +265,19 @@ function App() {
           throw new Error(data.error || 'Backend solver failed');
         }
       } else {
-        throw new Error('Backend not available');
+        // Backend not available: show error, do not attempt fallback
+        setSolution('The backend is unavailable. Please start the backend server to solve the cube.');
+        setSolutionMoves([]);
+        setMoveProgress({ current: 0, total: 0 });
       }
     } catch (error) {
       console.error('Backend solve failed:', error);
-      
-      if (apiStatus === 'available') {
-        // Backend reachable but failed
-        alert(`Backend error: ${error.message}`);
-      } else {
-        // Fallback still applies
-        try {
-          if (effectiveScramble) {
-            const moves = effectiveScramble.trim().split(/\s+/).filter(move => move.length > 0);
-            const inverseMoves = moves.reverse().map(move => {
-              if (move.endsWith('\'')) {
-                return move.slice(0, -1);
-              } else if (move.endsWith('2')) {
-                return move;
-              } else {
-                return move + '\'';
-              }
-            });
-            
-            const solutionMoves = inverseMoves.join(' ');
-            setSolution(solutionMoves);
-            const moveArray = solutionMoves.trim().split(/\s+/).filter(move => move.length > 0);
-            setSolutionMoves(moveArray);
-            setMoveProgress({ current: 0, total: moveArray.length });
-          } else {
-            setSolution('The backend is unavailable. The fallback solver can only solve cubes scrambled with the "Random Scramble" button.\n\nFor custom/manual configurations, please start the backend server.');
-            setSolutionMoves([]);
-            setMoveProgress({ current: 0, total: 0 });
-          }
-        } catch (fallbackError) {
-          console.error('Fallback solve failed:', fallbackError);
-          setSolution('Error: Could not solve cube');
-          setSolutionMoves([]);
-          setMoveProgress({ current: 0, total: 0 });
-        }
-      }
+      alert(`Backend error: ${error.message}`);
+      setSolution('The backend is unavailable. Please start the backend server to solve the cube.');
+      setSolutionMoves([]);
+      setMoveProgress({ current: 0, total: 0 });
+    } finally {
+      setIsLoading(false);
     }
   };
 
