@@ -6,7 +6,7 @@ import VideoInput from './VideoInput';
 import './App.css';
 
 // Use environment variable for API_BASE_URL
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'; 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://rubix-cube-solver.onrender.com'; 
 
 function App() {
   const [scrambleInput, setScrambleInput] = useState('');
