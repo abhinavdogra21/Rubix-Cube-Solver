@@ -12,7 +12,10 @@ pip install -r backend/kociemba_api/requirements.txt
 cd backend/kociemba_api
 python3 setup.py build_ext --inplace
 
-# Copy the built .so file to src/ so the Python wrapper can find it
-find . -name 'kociemba_solver*.so' -exec cp {} src/ \;
+# Find the built .so file and copy/rename it to src/kociemba_solver.so
+sofile=$(find . -name 'kociemba_solver*.so' | head -n 1)
+if [ -n "$sofile" ]; then
+  cp "$sofile" src/kociemba_solver.so
+fi
 
 cd ../..
