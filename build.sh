@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# Install system dependencies
-apt-get update
-apt-get install -y build-essential python3-dev cmake
-
 # Install Python dependencies
 pip install -r backend/kociemba_api/requirements.txt
 
@@ -28,4 +24,5 @@ else
 fi
 
 cd ../..
+
 
