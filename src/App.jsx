@@ -8,6 +8,10 @@ import './App.css';
 // Use environment variable for API_BASE_URL
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'; 
 
+// DEBUG: Print the API base URL at runtime
+console.log('REACT_APP_API_BASE_URL at runtime:', process.env.REACT_APP_API_BASE_URL);
+console.log('API_BASE_URL used in code:', API_BASE_URL);
+
 function App() {
   const [scrambleInput, setScrambleInput] = useState('');
   const [currentScramble, setCurrentScramble] = useState('');
