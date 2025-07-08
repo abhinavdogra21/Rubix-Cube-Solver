@@ -69,24 +69,19 @@ function App() {
         // Try to get scramble from backend
         const response = await fetch(`${API_BASE_URL}/api/scramble`);
         const data = await response.json();
-        
         if (data.success) {
           setScrambleInput(data.scramble);
         } else {
-          // Fallback to local generation
-          const scramble = generateRandomScramble();
-          setScrambleInput(scramble);
+          // Backend error: show error, do not generate locally
+          alert('Backend error: Unable to generate scramble.');
         }
       } else {
-        // Use local generation
-        const scramble = generateRandomScramble();
-        setScrambleInput(scramble);
+        // Backend not available: show error, do not generate locally
+        alert('Backend unavailable. Please start the backend server to generate a scramble.');
       }
     } catch (error) {
       console.error('Scramble generation failed:', error);
-      // Fallback to local generation
-      const scramble = generateRandomScramble();
-      setScrambleInput(scramble);
+      alert('Backend error: Unable to generate scramble.');
     } finally {
       setIsLoading(false);
     }
