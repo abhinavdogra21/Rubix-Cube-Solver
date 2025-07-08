@@ -4,36 +4,146 @@ export class CubeState {
     // Initialize cube in solved state
     // Each face is represented as a 3x3 array (0-8 indices)
     this.faces = {
-      front: ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],  // White
-      back: ['Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y'],   // Yellow
-      left: ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],   // Green
-      right: ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'],  // Blue
-      top: ['R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R'],    // Red
-      bottom: ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']  // Orange
+      front: ["W", "W", "W", "W", "W", "W", "W", "W", "W"], // White
+      back: ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"], // Yellow
+      left: ["G", "G", "G", "G", "G", "G", "G", "G", "G"], // Green
+      right: ["B", "B", "B", "B", "B", "B", "B", "B", "B"], // Blue
+      top: ["R", "R", "R", "R", "R", "R", "R", "R", "R"], // Red
+      bottom: ["O", "O", "O", "O", "O", "O", "O", "O", "O"], // Orange
     };
+  }
+
+  // Static method to create a CubeState object from a 54-character string
+  static fromString(stateString) {
+    if (stateString.length !== 54) {
+      throw new Error("Cube state string must be 54 characters long.");
+    }
+
+    const newCube = new CubeState();
+    const validChars = new Set(['U', 'L', 'F', 'R', 'B', 'D']);
+    
+    // Map characters to colors based on common Rubik's Cube notation
+    const charToColor = {
+      U: "R", // Up (Red)
+      L: "G", // Left (Green)
+      F: "W", // Front (White)
+      R: "B", // Right (Blue)
+      B: "Y", // Back (Yellow)
+      D: "O", // Down (Orange)
+    };
+
+    // First validate all characters
+    for (let char of stateString) {
+      if (!validChars.has(char)) {
+        throw new Error(`Invalid color character: ${char}. Valid characters are: U, L, F, R, B, D`);
+      }
+    }
+
+    // Count occurrences of each character
+    const charCounts = {};
+    for (let char of stateString) {
+      charCounts[char] = (charCounts[char] || 0) + 1;
+    }
+
+    // Verify each character appears exactly 9 times
+    for (let char of validChars) {
+      if (charCounts[char] !== 9) {
+        throw new Error(`Invalid cube state: ${char} appears ${charCounts[char] || 0} times (should be 9)`);
+      }
+    }
+
+    // Assuming the order U, R, F, D, L, B for the input string
+    const inputFaceOrder = ["top", "right", "front", "bottom", "left", "back"];
+    let charIndex = 0;
+
+    for (const faceName of inputFaceOrder) {
+      for (let i = 0; i < 9; i++) {
+        const char = stateString[charIndex++];
+        newCube.faces[faceName][i] = charToColor[char];
+      }
+    }
+
+    // Verify center pieces
+    const centers = {
+      top: newCube.faces.top[4],
+      right: newCube.faces.right[4],
+      front: newCube.faces.front[4],
+      bottom: newCube.faces.bottom[4],
+      left: newCube.faces.left[4],
+      back: newCube.faces.back[4]
+    };
+
+    // Check if centers are correct colors
+    if (centers.front !== "W") throw new Error("Front center must be White");
+    if (centers.back !== "Y") throw new Error("Back center must be Yellow");
+    if (centers.left !== "G") throw new Error("Left center must be Green");
+    if (centers.right !== "B") throw new Error("Right center must be Blue");
+    if (centers.top !== "R") throw new Error("Top center must be Red");
+    if (centers.bottom !== "O") throw new Error("Bottom center must be Orange");
+
+    return newCube;
+  }
+
+  // Convert the current cube state to a 54-character string
+  toString() {
+    const facesOrder = ["top", "right", "front", "bottom", "left", "back"];
+    const colorToChar = {
+      "W": "F", // Front (White)
+      "Y": "B", // Back (Yellow)
+      "G": "L", // Left (Green)
+      "B": "R", // Right (Blue)
+      "R": "U", // Up (Red)
+      "O": "D", // Down (Orange)
+    };
+
+    let stateString = "";
+    for (const faceName of facesOrder) {
+      for (let i = 0; i < 9; i++) {
+        stateString += colorToChar[this.faces[faceName][i]];
+      }
+    }
+    return stateString;
   }
 
   // Apply a single move
   applyMove(move) {
     const moveMap = {
-      'U': () => this.rotateU(),
-      'U\'': () => this.rotateUPrime(),
-      'U2': () => { this.rotateU(); this.rotateU(); },
-      'D': () => this.rotateD(),
-      'D\'': () => this.rotateDPrime(),
-      'D2': () => { this.rotateD(); this.rotateD(); },
-      'R': () => this.rotateR(),
-      'R\'': () => this.rotateRPrime(),
-      'R2': () => { this.rotateR(); this.rotateR(); },
-      'L': () => this.rotateL(),
-      'L\'': () => this.rotateLPrime(),
-      'L2': () => { this.rotateL(); this.rotateL(); },
-      'F': () => this.rotateF(),
-      'F\'': () => this.rotateFPrime(),
-      'F2': () => { this.rotateF(); this.rotateF(); },
-      'B': () => this.rotateB(),
-      'B\'': () => this.rotateBPrime(),
-      'B2': () => { this.rotateB(); this.rotateB(); }
+      U: () => this.rotateU(),
+      "U'": () => this.rotateUPrime(),
+      U2: () => {
+        this.rotateU();
+        this.rotateU();
+      },
+      D: () => this.rotateD(),
+      "D'": () => this.rotateDPrime(),
+      D2: () => {
+        this.rotateD();
+        this.rotateD();
+      },
+      R: () => this.rotateR(),
+      "R'": () => this.rotateRPrime(),
+      R2: () => {
+        this.rotateR();
+        this.rotateR();
+      },
+      L: () => this.rotateL(),
+      "L'": () => this.rotateLPrime(),
+      L2: () => {
+        this.rotateL();
+        this.rotateL();
+      },
+      F: () => this.rotateF(),
+      "F'": () => this.rotateFPrime(),
+      F2: () => {
+        this.rotateF();
+        this.rotateF();
+      },
+      B: () => this.rotateB(),
+      "B'": () => this.rotateBPrime(),
+      B2: () => {
+        this.rotateB();
+        this.rotateB();
+      },
     };
 
     if (moveMap[move]) {
@@ -43,8 +153,8 @@ export class CubeState {
 
   // Apply multiple moves from a string
   applyMoves(moveString) {
-    const moves = moveString.trim().split(/\s+/).filter(move => move.length > 0);
-    moves.forEach(move => this.applyMove(move));
+    const moves = moveString.trim().split(/\s+/).filter((move) => move.length > 0);
+    moves.forEach((move) => this.applyMove(move));
   }
 
   // Rotate face clockwise
@@ -289,14 +399,14 @@ export class CubeState {
   isSolved() {
     // In solved state, each face should have all squares of the same color
     const solvedState = {
-      front: ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-      back: ['Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
-      left: ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],
-      right: ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'],
-      top: ['R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R'],
-      bottom: ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
+      front: ["W", "W", "W", "W", "W", "W", "W", "W", "W"],
+      back: ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
+      left: ["G", "G", "G", "G", "G", "G", "G", "G", "G"],
+      right: ["B", "B", "B", "B", "B", "B", "B", "B", "B"],
+      top: ["R", "R", "R", "R", "R", "R", "R", "R", "R"],
+      bottom: ["O", "O", "O", "O", "O", "O", "O", "O", "O"],
     };
-    
+
     for (const face in solvedState) {
       for (let i = 0; i < 9; i++) {
         if (this.faces[face][i] !== solvedState[face][i]) {
@@ -310,58 +420,64 @@ export class CubeState {
   // Get cube colors for 3D visualization
   getCubeColors() {
     const colorMap = {
-      'W': '#ffffff', // White
-      'Y': '#ffff00', // Yellow
-      'R': '#ff0000', // Red
-      'O': '#ff8000', // Orange
-      'G': '#00ff00', // Green
-      'B': '#0000ff'  // Blue
+      W: "#ffffff", // White
+      Y: "#ffff00", // Yellow
+      R: "#ff0000", // Red
+      O: "#ff8000", // Orange
+      G: "#00ff00", // Green
+      B: "#0000ff", // Blue
     };
 
     const pieces = [];
-    
+
     // Generate 27 cube pieces (3x3x3)
     for (let x = -1; x <= 1; x++) {
       for (let y = -1; y <= 1; y++) {
         for (let z = -1; z <= 1; z++) {
           const position = [x, y, z];
           const colors = {};
-          
+
           // Map face positions to sticker indices
-          if (x === 1) { // Right face
+          if (x === 1) {
+            // Right face
             const idx = (1 - z) * 3 + (1 + y);
-            colors.right = colorMap[this.faces.right[idx]] || '#333';
+            colors.right = colorMap[this.faces.right[idx]] || "#333";
           }
-          if (x === -1) { // Left face
+          if (x === -1) {
+            // Left face
             const idx = (1 + z) * 3 + (1 + y);
-            colors.left = colorMap[this.faces.left[idx]] || '#333';
+            colors.left = colorMap[this.faces.left[idx]] || "#333";
           }
-          if (y === 1) { // Top face
+          if (y === 1) {
+            // Top face
             const idx = (1 - z) * 3 + (1 + x);
-            colors.top = colorMap[this.faces.top[idx]] || '#333';
+            colors.top = colorMap[this.faces.top[idx]] || "#333";
           }
-          if (y === -1) { // Bottom face
+          if (y === -1) {
+            // Bottom face
             const idx = (1 + z) * 3 + (1 + x);
-            colors.bottom = colorMap[this.faces.bottom[idx]] || '#333';
+            colors.bottom = colorMap[this.faces.bottom[idx]] || "#333";
           }
-          if (z === 1) { // Front face
+          if (z === 1) {
+            // Front face
             const idx = (1 - y) * 3 + (1 + x);
-            colors.front = colorMap[this.faces.front[idx]] || '#333';
+            colors.front = colorMap[this.faces.front[idx]] || "#333";
           }
-          if (z === -1) { // Back face
+          if (z === -1) {
+            // Back face
             const idx = (1 - y) * 3 + (1 - x);
-            colors.back = colorMap[this.faces.back[idx]] || '#333';
+            colors.back = colorMap[this.faces.back[idx]] || "#333";
           }
-          
+
           pieces.push({
             key: `${x}-${y}-${z}`,
             position,
-            colors
+            colors,
           });
         }
       }
     }
-    
+
     return pieces;
   }
 
@@ -370,4 +486,5 @@ export class CubeState {
     return JSON.stringify(this.faces, null, 2);
   }
 }
+
 

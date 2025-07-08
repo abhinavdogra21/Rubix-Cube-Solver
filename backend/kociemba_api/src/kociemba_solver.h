@@ -17,22 +17,28 @@ public:
     KociembaSolver();
     ~KociembaSolver();
     
+    // Main interface
     std::string solve(const std::string& cubeString);
     std::string generateScramble(int length = 25);
     bool isValidCube(const std::string& cubeString);
     std::string scrambleToCubeString(const std::string& scramble);
     
+    // Constants for move tables
     static const std::vector<Move> PHASE1_MOVES;
     static const std::vector<Move> PHASE2_MOVES;
     static const std::array<int, 13> FACTORIAL;
     static const std::array<long long, 21> FACTORIAL_LONG;
 
 private:
+    // Cube state
     std::array<int, 8> corners;
     std::array<int, 8> cornerOrient;
     std::array<int, 12> edges;
     std::array<int, 12> edgeOrient;
     
+    // Helper methods
+    std::string solveScrambleSequence(const std::string& scramble);
+    std::string solveCubeState(const std::string& cubeString);
     std::string moveToString(Move move) const;
     Move stringToMove(const std::string& moveStr) const;
     std::string movesToString(const std::vector<Move>& moves) const;
@@ -41,6 +47,7 @@ private:
     void resetCube();
 };
 
+// C interface
 extern "C" {
     const char* kociemba_solve(const char* cubeString);
     const char* kociemba_generate_scramble();

@@ -1,4 +1,4 @@
-/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles/kociemba_lib.dir
-/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles/kociemba_solver.dir
-/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles/edit_cache.dir
-/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app/backend/build/CMakeFiles/rebuild_cache.dir
+/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles/kociemba_lib.dir
+/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles/kociemba_solver.dir
+/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles/edit_cache.dir
+/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles/rebuild_cache.dir

@@ -72,14 +72,28 @@ def api_solve_cube():
         
         cube_state = data['cube_state']
         
+        # Enhanced validation and debugging
+        print(f"Received cube state: {cube_state}")
+        print(f"Cube state length: {len(cube_state)}")
+        print(f"Cube state characters: {set(cube_state)}")
+        
         if KOCIEMBA_AVAILABLE:
+            # Validate cube state first
             if not is_valid_cube(cube_state):
                 return jsonify({
                     'success': False,
-                    'error': 'Invalid cube state'
+                    'error': 'Invalid cube state: The cube configuration is not valid or solvable'
                 }), 400
             
             solution = solve_cube(cube_state)
+            
+            # Check if solution contains an error message
+            if solution.startswith('Error:'):
+                return jsonify({
+                    'success': False,
+                    'error': solution
+                }), 400
+            
             return jsonify({
                 'success': True,
                 'solution': solution
@@ -91,9 +105,10 @@ def api_solve_cube():
             }), 503
             
     except Exception as e:
+        print(f"Solve error: {str(e)}")
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': f'Internal server error: {str(e)}'
         }), 500
 
 @app.route('/api/solve_scramble', methods=['POST'])
@@ -191,6 +206,22 @@ def api_validate_cube():
             'error': str(e)
         }), 500
 
+@app.route('/solve', methods=['POST'])
+def solve():
+    try:
+        data = request.get_json()
+        if not data or 'state' not in data:
+            return jsonify({'error': 'Missing cube state'}), 400
+        
+        cube_state = data['state']
+        solution = solve_cube(cube_state)
+        return jsonify({'solution': solution})
+    
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': 'Internal server error: ' + str(e)}), 500
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True, port=5001)
 

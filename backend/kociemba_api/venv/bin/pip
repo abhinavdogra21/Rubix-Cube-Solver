@@ -1,4 +1,6 @@
-#!/home/ubuntu/project_from_user/rubiks-cube-app/backend/kociemba_api/venv/bin/python3.11
+#!/bin/sh
+'''exec' "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/kociemba_api/venv/bin/python3.11" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

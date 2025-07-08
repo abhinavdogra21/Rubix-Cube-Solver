@@ -200,20 +200,47 @@ const RubiksCube = forwardRef(({ cubeState }, ref) => {
   React.useImperativeHandle(ref, () => ({
     updateCubeState: (newState) => {
       updateCubeColors(newState);
+      currentStateRef.current = newState;
     },
-    animateScramble: () => {},
-    animateSolution: async (moves, initialState) => {
-      // Animate a sequence of moves on the cube using CubeState logic
-      if (!Array.isArray(moves) || moves.length === 0 || !initialState) return;
-      // Deep clone the initial state using CubeState
+    animateMove: async (move) => {
+      if (!move) return;
       const { CubeState } = await import('./cubeState');
-      const state = new CubeState();
-      state.faces = JSON.parse(JSON.stringify(initialState.faces));
-      for (let i = 0; i < moves.length; i++) {
-        state.applyMove(moves[i]);
+      let state;
+      if (currentStateRef.current) {
+        state = new CubeState();
+        state.faces = JSON.parse(JSON.stringify(currentStateRef.current.faces));
+      } else {
+        state = new CubeState();
+      }
+      state.applyMove(move);
+      updateCubeColors(state);
+      currentStateRef.current = state;
+      await new Promise(res => setTimeout(res, 350));
+    },
+    animateSolution: async (movesString) => {
+      if (!movesString || typeof movesString !== 'string') return;
+      const moves = movesString.trim().split(/\s+/).filter(m => m.length > 0);
+      const { CubeState } = await import('./cubeState');
+      let state;
+      if (currentStateRef.current) {
+        state = new CubeState();
+        state.faces = JSON.parse(JSON.stringify(currentStateRef.current.faces));
+      } else {
+        state = new CubeState();
+      }
+      for (let move of moves) {
+        state.applyMove(move);
         updateCubeColors(state);
         await new Promise(res => setTimeout(res, 350));
       }
+      currentStateRef.current = state;
+    },
+    getCurrentState: () => {
+      if (!currentStateRef.current) return null;
+      const { CubeState } = require('./cubeState');
+      const clone = new CubeState();
+      clone.faces = JSON.parse(JSON.stringify(currentStateRef.current.faces));
+      return clone;
     }
   }));
 

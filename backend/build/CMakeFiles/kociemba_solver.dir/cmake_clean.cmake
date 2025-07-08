@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.o"
   "CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.o.d"
-  "kociemba_solver.cpython-313-darwin.so"
+  "kociemba_solver.cpython-311-darwin.so"
   "kociemba_solver.pdb"
 )
 
