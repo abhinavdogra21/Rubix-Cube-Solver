@@ -1,6 +1,6 @@
 CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o: \
-  /Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed\ /backend/kociemba_api/src/kociemba_solver.cpp \
-  /Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed\ /backend/kociemba_api/src/kociemba_solver.h \
+  /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app\ (github)\ /backend/kociemba_api/src/kociemba_solver.cpp \
+  /Users/abhinavdogra/Desktop/Projects/rubiks-cube-app\ (github)\ /backend/kociemba_api/src/kociemba_solver.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/string \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/max.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/comp.h \

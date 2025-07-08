@@ -1,7 +1,5 @@
 # 3D Interactive Rubik's Cube Solver
 
-A web-based Rubik's Cube solver with 3D visualization and a C++ Kociemba algorithm backend.
-
 ## ✨ Features
 
 - **3D Interactive Cube Visualization**: Real-time 3D rendering with smooth animations
@@ -11,6 +9,58 @@ A web-based Rubik's Cube solver with 3D visualization and a C++ Kociemba algorit
 - **Manual Cube Configuration**: Set up any cube state with validation
 - **Video Detection**: (Experimental) Detect cube state from your camera
 - **Cross-platform**: Works on macOS and Windows
+
+## ⚠️ Before You Start: Clean Clone & Common Build Issues
+
+**1. Always clone a clean repo:**
+- This repository should NOT include any prebuilt `.so` files or `build/` directories. If you see them, delete them before building.
+- After cloning, always build the backend locally. Do not rely on any pre-existing build artifacts.
+
+**2. Install pybind11:**
+- On macOS (recommended):
+  ```sh
+  brew install pybind11
+  ```
+- Or with pip (if you use a Python virtualenv):
+  ```sh
+  pip install pybind11
+  ```
+
+**3. Standard backend build steps after cloning:**
+```sh
+cd backend/kociemba_api
+rm -rf build
+mkdir build && cd build
+cmake ..
+make -j$(sysctl -n hw.ncpu)
+cp kociemba_solver*.so ../src/kociemba_solver.so
+cd ..
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+```
+
+**4. If you see CMake or Python errors:**
+- Make sure you have the correct Python version and development headers (Homebrew Python is recommended on macOS).
+- If you see errors about `FindPythonInterp` or `FindPythonLibs`, ensure your `CMakeLists.txt` contains:
+  ```cmake
+  set(PYBIND11_FINDPYTHON ON)
+  find_package(pybind11 REQUIRED)
+  ```
+- If you see errors about `strip` or shell syntax, add this to your `CMakeLists.txt`:
+  ```cmake
+  set(CMAKE_STRIP "")
+  ```
+- Avoid spaces or parentheses in your project path if possible. If you can't, the above `CMAKE_STRIP` workaround is required.
+
+**5. Do NOT commit these files to GitHub:**
+- All `build/` directories
+- All `.so`, `.pyd`, `.dll` files
+- All `__pycache__/`, `.pyc`, `.egg-info/`, `venv/`, `.env/`, `node_modules/`
+- (See `.gitignore` for details)
+
+---
 
 ## 🚀 Quick Start
 
@@ -104,6 +154,54 @@ Frontend: http://localhost:5173
 - **Library Loading Issues**: Ensure the .so/.dll/.pyd file is in the correct location and readable.
 
 For more help, see comments in the code or open an issue.
+
+---
+
+## 🛠️ How to Run the Backend for the First Time (and Fix pybind11/Python CMake Issues)
+
+If you are running the backend for the first time, or encounter errors like:
+- `CMake Error: The source ... does not match the source ... used to generate cache. Re-run cmake with a different source directory.`
+- `Python config failure` or warnings about `FindPythonInterp`/`FindPythonLibs`
+
+Follow these steps:
+
+### 1. Clean the Build Directory
+If you see a CMake cache/source mismatch error, run:
+```sh
+cd backend
+rm -rf build
+mkdir build && cd build
+```
+
+### 2. Fix pybind11/Python CMake Errors
+If you see errors about Python config or pybind11, edit your `CMakeLists.txt` (in `backend/` or `backend/kociemba_api/`) and add this **before** `find_package(pybind11 REQUIRED)`:
+```cmake
+set(PYBIND11_FINDPYTHON ON)
+find_package(pybind11 REQUIRED)
+```
+This uses the modern CMake Python finder and avoids deprecated warnings.
+
+### 3. Build the Backend
+```sh
+cmake ..
+make -j$(sysctl -n hw.ncpu)
+cp kociemba_solver*.so ../kociemba_api/src/kociemba_solver.so
+```
+
+### 4. Set Up Python Environment
+```sh
+cd ../kociemba_api
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+```
+
+The backend should now run at http://localhost:5001
+
+If you have further issues, see the Troubleshooting section above or open an issue.
+
+---
 
 
 

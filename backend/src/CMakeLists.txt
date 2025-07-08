@@ -33,3 +33,13 @@ add_executable(test_solver test_solver.cpp ${SOURCES})
 target_compile_options(custom_cube_solver PRIVATE -fPIC -O3)
 target_compile_options(test_solver PRIVATE -O3)
 
+# kociemba_solver module
+pybind11_add_module(kociemba_solver 
+    src/kociemba_wrapper.cpp
+    src/solver/solver.cpp
+    src/solver/cube.cpp
+)
+
+# Disable strip for this target as well
+set_target_properties(kociemba_solver PROPERTIES LINK_FLAGS "-Wl,-no_strip")
+

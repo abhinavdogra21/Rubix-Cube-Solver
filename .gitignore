@@ -1,0 +1,12 @@
+# Ignore build artifacts and compiled files
+build/
+**/build/
+*.so
+*.pyd
+*.dll
+*.pyc
+__pycache__/
+*.egg-info/
+venv/
+.env/
+node_modules/

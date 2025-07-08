@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DVERSION_INFO="" -Dkociemba_solver_EXPORTS
 
-CXX_INCLUDES = -I/usr/include/python3.10 -isystem /opt/homebrew/include -isystem /opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11
+CXX_INCLUDES = -I/usr/include/python3.10 -isystem /opt/homebrew/include -isystem /opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13
 
 CXX_FLAGSarm64 = -std=gnu++14 -arch arm64 -fPIC -fvisibility=hidden -flto
 

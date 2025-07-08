@@ -54,10 +54,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend"
+CMAKE_SOURCE_DIR = "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build"
+CMAKE_BINARY_DIR = "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build"
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -88,14 +88,14 @@ clean: CMakeFiles/kociemba_solver.dir/clean
 CMakeFiles/kociemba_lib.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" --progress-num=1,2 "Built target kociemba_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" --progress-num=1,2 "Built target kociemba_lib"
 .PHONY : CMakeFiles/kociemba_lib.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/kociemba_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/kociemba_lib.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" 0
 .PHONY : CMakeFiles/kociemba_lib.dir/rule
 
 # Convenience name for target.
@@ -105,7 +105,7 @@ kociemba_lib: CMakeFiles/kociemba_lib.dir/rule
 # codegen rule for target.
 CMakeFiles/kociemba_lib.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" --progress-num=1,2 "Finished codegen for target kociemba_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" --progress-num=1,2 "Finished codegen for target kociemba_lib"
 .PHONY : CMakeFiles/kociemba_lib.dir/codegen
 
 # clean rule for target.
@@ -120,14 +120,14 @@ CMakeFiles/kociemba_lib.dir/clean:
 CMakeFiles/kociemba_solver.dir/all: CMakeFiles/kociemba_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_solver.dir/build.make CMakeFiles/kociemba_solver.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_solver.dir/build.make CMakeFiles/kociemba_solver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" --progress-num=3,4 "Built target kociemba_solver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" --progress-num=3,4 "Built target kociemba_solver"
 .PHONY : CMakeFiles/kociemba_solver.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/kociemba_solver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" 4
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/kociemba_solver.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" 0
 .PHONY : CMakeFiles/kociemba_solver.dir/rule
 
 # Convenience name for target.
@@ -137,7 +137,7 @@ kociemba_solver: CMakeFiles/kociemba_solver.dir/rule
 # codegen rule for target.
 CMakeFiles/kociemba_solver.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_solver.dir/build.make CMakeFiles/kociemba_solver.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Downloads/enhanced-rubiks-cube-fixed /backend/build/CMakeFiles" --progress-num=3,4 "Finished codegen for target kociemba_solver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" --progress-num=3,4 "Finished codegen for target kociemba_solver"
 .PHONY : CMakeFiles/kociemba_solver.dir/codegen
 
 # clean rule for target.

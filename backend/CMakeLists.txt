@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
+# Disable strip globally to avoid shell errors with spaces/parentheses in path
+set(CMAKE_STRIP "")
 project(kociemba_solver)
 
 set(CMAKE_CXX_STANDARD 14)
