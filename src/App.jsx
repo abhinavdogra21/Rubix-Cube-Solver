@@ -5,7 +5,8 @@ import CubeConfigurator from './CubeConfigurator';
 import VideoInput from './VideoInput';
 import './App.css';
 
-const API_BASE_URL = 'https://rubix-cube-solver.onrender.com'; // Use Render backend
+// Use environment variable for API_BASE_URL
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'; 
 
 function App() {
   const [scrambleInput, setScrambleInput] = useState('');
@@ -40,38 +41,7 @@ function App() {
     }
   };
 
-  const generateRandomScramble = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/scramble`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          setScrambleInput(data.scramble);
-          setCurrentScramble(data.scramble);
-          // Update cube state if provided
-          if (data.cube_state) {
-            const newCubeState = new CubeState();
-            newCubeState.fromString(data.cube_state);
-            setCubeStateValue(newCubeState);
-          }
-        } else {
-          console.error('Scramble generation failed:', data.error);
-          // Fallback to client-side generation
-          generateFallbackScramble();
-        }
-      } else {
-        generateFallbackScramble();
-      }
-    } catch (error) {
-      console.error('Error generating scramble:', error);
-      generateFallbackScramble();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const generateFallbackScramble = () => {
+  const generateRandomScramble = () => {
     const moves = ['R', 'L', 'U', 'D', 'F', 'B'];
     const modifiers = ['', '\'', '2'];
     const scrambleLength = 25;
@@ -90,293 +60,524 @@ function App() {
       lastMove = move;
     }
     
-    const scrambleString = scramble.join(' ');
-    setScrambleInput(scrambleString);
-    setCurrentScramble(scrambleString);
+    return scramble.join(' ');
   };
 
-  const applyScramble = () => {
-    if (!scrambleInput.trim()) return;
-    
-    const newCubeState = new CubeState();
-    const moves = scrambleInput.trim().split(/\s+/);
-    
-    for (const move of moves) {
-      newCubeState.applyMove(move);
-    }
-    
-    setCubeStateValue(newCubeState);
-    setCurrentScramble(scrambleInput);
-    setSolution('');
-    setSolutionMoves([]);
-    setCurrentMoveIndex(-1);
-    setMoveProgress({ current: 0, total: 0 });
-  };
-
-  const solveCube = async () => {
-    if (!cubeState) return;
-    
+  const handleRandomScramble = async () => {
     setIsLoading(true);
-    setSolution('');
-    
     try {
-      const cubeString = cubeState.toString();
-      console.log('Sending cube state to solver:', cubeString);
-      
-      const response = await fetch(`${API_BASE_URL}/api/solve`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cube_state: cubeString }),
-      });
-      
-      if (response.ok) {
+      if (apiStatus === 'available') {
+        // Try to get scramble from backend
+        const response = await fetch(`${API_BASE_URL}/api/scramble`);
         const data = await response.json();
         if (data.success) {
-          const solutionString = data.solution;
-          setSolution(solutionString);
-          
-          if (solutionString && solutionString.trim()) {
-            const moves = solutionString.trim().split(/\s+/);
-            setSolutionMoves(moves);
-            setMoveProgress({ current: 0, total: moves.length });
-          }
+          setScrambleInput(data.scramble);
         } else {
-          setSolution(`Error: ${data.error}`);
-          console.error('Solve failed:', data.error);
+          // Backend error: show error, do not generate locally
+          alert('Backend error: Unable to generate scramble.');
         }
       } else {
-        setSolution('Error: Failed to connect to solver');
+        // Backend not available: show error, do not generate locally
+        alert('Backend unavailable. Please start the backend server to generate a scramble.');
       }
     } catch (error) {
-      console.error('Error solving cube:', error);
-      setSolution('Error: Network error');
+      console.error('Scramble generation failed:', error);
+      alert('Backend error: Unable to generate scramble.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const resetCube = () => {
-    const newCubeState = new CubeState();
-    setCubeStateValue(newCubeState);
+  const handleApplyScramble = async () => {
+    if (!scrambleInput.trim()) return;
+    
+    setIsLoading(true);
+    setCurrentScramble(''); // Clear currentScramble to indicate manual config or new scramble
     setSolution('');
-    setSolutionMoves([]);
-    setCurrentMoveIndex(-1);
-    setCurrentScramble('');
-    setScrambleInput('');
-    setMoveProgress({ current: 0, total: 0 });
+    
+    try {
+      // Create new cube state and apply scramble
+      const newCubeState = new CubeState();
+      newCubeState.applyMoves(scrambleInput);
+      setCubeStateValue(newCubeState);
+      
+      // Update 3D visualization
+      if (cubeRef.current) {
+        cubeRef.current.updateCubeState(newCubeState);
+        cubeRef.current.animateScramble(scrambleInput);
+      }
+      setCurrentScramble(scrambleInput); // Set currentScramble after successful application
+    } catch (error) {
+      console.error('Apply scramble failed:', error);
+    } finally {
+      setTimeout(() => setIsLoading(false), 1000);
+    }
   };
 
-  const setCubeState = (newState) => {
-    setCubeStateValue(newState);
-    setSolution('');
-    setSolutionMoves([]);
-    setCurrentMoveIndex(-1);
-    setMoveProgress({ current: 0, total: 0 });
-  };
+  // Helper to validate cube state (basic check: 54 chars, only valid colors)
+  function isValidCubeStateString(state) {
+    if (typeof state !== 'string' || state.length !== 54) return false;
+    // Accept only W, R, G, Y, O, B
+    return /^[WRGYOBwrgyob]{54}$/.test(state);
+  }
 
-  const animateSolution = () => {
-    if (solutionMoves.length === 0 || isAnimating) return;
+  // Advanced cube state validation
+  function advancedCubeStateValidation(state) {
+    if (typeof state !== 'string' || state.length !== 54) return 'Cube state must be 54 characters.';
+
+    state = state.toUpperCase();
+
+    // Detect representation: if we find W or O letters, treat as color representation
+    const colorLetters = ['W','Y','G','B','R','O'];
+    const notationLetters = ['U','R','F','D','L','B'];
+
+    const isColorRepresentation = [...state].some(ch => ch === 'W' || ch === 'O');
+
+    if (isColorRepresentation) {
+      // Validate color representation
+      const counts = { W:0,Y:0,G:0,B:0,R:0,O:0 };
+      for (const ch of state) {
+        if (!colorLetters.includes(ch)) return `Invalid color letter: ${ch}. Allowed: W,Y,G,B,R,O`;
+        counts[ch]++;
+      }
+      for (const color of colorLetters) {
+        if (counts[color] !== 9) return `Each color must appear exactly 9 times (${color} has ${counts[color]}).`;
+      }
+      // Center checks (indices same as before)
+      const centerIndices = [4,13,22,31,40,49];
+      const centers = centerIndices.map(i => state[i]);
+      const uniqueCenters = new Set(centers);
+      if (uniqueCenters.size !== 6) return 'Each face must have a unique center color.';
+      const opp = { W:'Y', Y:'W', R:'O', O:'R', G:'B', B:'G' };
+      if (opp[centers[0]] !== centers[3]) return 'White and Yellow must be on opposite faces';
+      if (opp[centers[4]] !== centers[1]) return 'Red and Orange must be on opposite faces';
+      if (opp[centers[2]] !== centers[5]) return 'Green and Blue must be on opposite faces';
+
+      return null;
+    } else {
+      // Validate notation representation
+      const counts = { U:0,R:0,F:0,D:0,L:0,B:0 };
+      for (const ch of state) {
+        if (!notationLetters.includes(ch)) return `Invalid notation letter: ${ch}. Allowed: U,R,F,D,L,B`;
+        counts[ch]++;
+      }
+      for (const letter of notationLetters) {
+        if (counts[letter] !== 9) return `Each face letter must appear exactly 9 times (${letter} has ${counts[letter]}).`;
+      }
+      // Center letters order: indices 4(U), 13(R), 22(F), 31(D), 40(L), 49(B)
+      const centers = [state[4], state[13], state[22], state[31], state[40], state[49]];
+      const uniqueCenters = new Set(centers);
+      if (uniqueCenters.size !== 6) return 'Each face must have a unique center.';
+      const opp = { U:'D', D:'U', R:'L', L:'R', F:'B', B:'F' };
+      if (opp[centers[0]] !== centers[3]) return 'U and D centers must be opposite';
+      if (opp[centers[1]] !== centers[4]) return 'R and L centers must be opposite';
+      if (opp[centers[2]] !== centers[5]) return 'F and B centers must be opposite';
+
+      return null;
+    }
+  }
+
+  // Convert CubeState (internal colors) to solver digit string expected by backend
+  function cubeStateToDigits(stateObj) {
+    // Determine mapping from center colors to digits 0-5 in order U,R,F,D,L,B (top,right,front,bottom,left,back)
+    const centers = [
+      stateObj.faces.top[4],
+      stateObj.faces.right[4],
+      stateObj.faces.front[4],
+      stateObj.faces.bottom[4],
+      stateObj.faces.left[4],
+      stateObj.faces.back[4]
+    ];
+    const colorToDigit = {};
+    centers.forEach((col, idx)=>{ colorToDigit[col] = idx.toString(); });
+    const facesOrder = ['top','right','front','bottom','left','back'];
+    let result='';
+    for(const face of facesOrder){
+      for(let i=0;i<9;i++){
+        const color=stateObj.faces[face][i];
+        result += colorToDigit[color] ?? '0';
+      }
+    }
+    return result;
+  }
+
+  const handleSolveCube = async () => {
+    if (!currentScramble && cubeState.toString() === new CubeState().toString()) {
+      setSolution('Cube is already solved!');
+      setIsLoading(false);
+      setCurrentMoveIndex(-1);
+      setIsAnimating(false);
+      setSolutionMoves([]);
+      setMoveProgress({ current: 0, total: 0 });
+      return;
+    }
     
-    setIsAnimating(true);
-    setCurrentMoveIndex(0);
+    // Reset solution state
+    setCurrentMoveIndex(-1);
+    setIsAnimating(false);
+    setSolutionMoves([]);
+    setMoveProgress({ current: 0, total: 0 });
     
-    const animateMove = (index) => {
-      if (index >= solutionMoves.length) {
-        setIsAnimating(false);
-        setCurrentMoveIndex(-1);
+    // If user typed a scramble but didn't press "Apply", use it directly
+    let effectiveScramble = currentScramble;
+    if (!effectiveScramble && scrambleInput.trim()) {
+      effectiveScramble = scrambleInput.trim();
+    }
+
+    // Validate cube state before sending to backend
+    if (!effectiveScramble) {
+      const advErr = advancedCubeStateValidation(cubeState.toString());
+      if (advErr) {
+        alert('Invalid cube configuration! ' + advErr);
         return;
       }
-      
-      const move = solutionMoves[index];
-      const newCubeState = new CubeState(cubeState);
-      newCubeState.applyMove(move);
-      setCubeStateValue(newCubeState);
-      setCurrentMoveIndex(index);
-      setMoveProgress({ current: index + 1, total: solutionMoves.length });
-      
-      setTimeout(() => animateMove(index + 1), 800);
-    };
-    
-    animateMove(0);
-  };
-
-  const stepThroughSolution = (direction) => {
-    if (solutionMoves.length === 0) return;
-    
-    let newIndex;
-    if (direction === 'next') {
-      newIndex = Math.min(currentMoveIndex + 1, solutionMoves.length - 1);
-    } else {
-      newIndex = Math.max(currentMoveIndex - 1, -1);
     }
     
-    if (newIndex === currentMoveIndex) return;
+    setIsLoading(true);
+    try {
+      if (apiStatus === 'available') {
+        // Try backend solver only
+        const endpoint = effectiveScramble ? '/api/solve_scramble' : '/api/solve';
+        const payload = effectiveScramble 
+          ? { scramble: effectiveScramble } 
+          : { cube_state: cubeStateToDigits(cubeState) };
+
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.solution) {
+          const moves = data.solution.trim().split(/\s+/).filter(move => move.length > 0);
+          setSolution(data.solution);
+          setSolutionMoves(moves);
+          setMoveProgress({ current: 0, total: moves.length });
+        } else {
+          throw new Error(data.error || 'Backend solver failed');
+        }
+      } else {
+        // Backend not available: show error, do not attempt fallback
+        setSolution('The backend is unavailable. Please start the backend server to solve the cube.');
+        setSolutionMoves([]);
+        setMoveProgress({ current: 0, total: 0 });
+      }
+    } catch (error) {
+      console.error('Backend solve failed:', error);
+      alert(`Backend error: ${error.message}`);
+      setSolution('The backend is unavailable. Please start the backend server to solve the cube.');
+      setSolutionMoves([]);
+      setMoveProgress({ current: 0, total: 0 });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleNextMove = async () => {
+    if (!solution || isAnimating) return;
+    const moves = solutionMoves;
+    if (currentMoveIndex + 1 >= moves.length) return;
+
+    const nextMoveIndex = currentMoveIndex + 1;
+    setIsAnimating(true);
+    try {
+      if (cubeRef.current) {
+        const nextMove = moves[nextMoveIndex];
+        await cubeRef.current.animateMove(nextMove);
+        // Attempt to fetch updated cube state but don't block index/progress update on it
+        let updated;
+        try {
+          updated = cubeRef.current.getCurrentState();
+          if (updated) setCubeStateValue(updated);
+        } catch (e) {
+          console.warn('Could not get cube state after move');
+        }
+      }
+    } catch (error) {
+      console.error('Error applying move:', error);
+    } finally {
+      // Update move index & progress regardless of animation success
+      const movesArr = solutionMoves;
+      setCurrentMoveIndex(nextMoveIndex);
+      setMoveProgress({ current: nextMoveIndex + 1, total: movesArr.length });
+      setIsAnimating(false);
+    }
+  };
+
+  const handlePrevMove = async () => {
+    if (!solution || isAnimating || currentMoveIndex < 0) return;
+
+    const moves = solutionMoves;
+    const currentMove = moves[currentMoveIndex];
+    setIsAnimating(true);
+    try {
+      if (cubeRef.current) {
+        let inverseMove;
+        if (currentMove.endsWith("'")) {
+          inverseMove = currentMove.slice(0, -1);
+        } else if (currentMove.endsWith('2')) {
+          inverseMove = currentMove; // 180° move is its own inverse
+        } else {
+          inverseMove = currentMove + "'";
+        }
+        await cubeRef.current.animateMove(inverseMove);
+        // sync cube state if available
+        let updated;
+        try {
+          updated = cubeRef.current.getCurrentState();
+          if (updated) setCubeStateValue(updated);
+        } catch {}
+      }
+    } catch (error) {
+      console.error('Error applying move:', error);
+    } finally {
+      const newMoveIndex = currentMoveIndex - 1;
+      setCurrentMoveIndex(newMoveIndex);
+      setMoveProgress({ current: newMoveIndex + 1, total: moves.length });
+      setIsAnimating(false);
+    }
+  };
+
+  const handlePlaySolution = async () => {
+    if (!solution || isAnimating) return;
     
-    // Apply moves up to the new index
+    const moves = solutionMoves;
+    if (currentMoveIndex + 1 >= moves.length) {
+      setCurrentMoveIndex(-1);
+      setMoveProgress({ current: 0, total: moves.length });
+      return;
+    }
+    
+    setIsAnimating(true);
+    
+    try {
+      // Apply all remaining moves
+      const remainingMoves = moves.slice(currentMoveIndex + 1);
+      if (cubeRef.current) {
+        await cubeRef.current.animateSolution(remainingMoves.join(' '));
+        const updated = cubeRef.current.getCurrentState();
+        if (updated) {
+          setCubeStateValue(updated);
+          setCurrentMoveIndex(moves.length - 1);
+          setMoveProgress({ current: moves.length, total: moves.length });
+        }
+      }
+    } catch (error) {
+      console.error('Error playing solution:', error);
+    } finally {
+      setIsAnimating(false);
+    }
+  };
+
+  const handleReset = () => {
     const newCubeState = new CubeState();
-    const moves = currentScramble.trim().split(/\s+/);
-    
-    // Apply scramble first
-    for (const move of moves) {
-      if (move.trim()) newCubeState.applyMove(move);
-    }
-    
-    // Apply solution moves up to new index
-    for (let i = 0; i <= newIndex; i++) {
-      newCubeState.applyMove(solutionMoves[i]);
-    }
-    
     setCubeStateValue(newCubeState);
-    setCurrentMoveIndex(newIndex);
-    setMoveProgress({ current: newIndex + 1, total: solutionMoves.length });
-  };
-
-  const getApiStatusColor = () => {
-    switch (apiStatus) {
-      case 'available': return '#4CAF50';
-      case 'limited': return '#FF9800';
-      case 'unavailable': return '#F44336';
-      default: return '#9E9E9E';
+    setScrambleInput('');
+    setCurrentScramble('');
+    setSolution('');
+    
+    if (cubeRef.current) {
+      cubeRef.current.updateCubeState(newCubeState);
     }
   };
 
-  const getApiStatusText = () => {
+  const handleCubeStateChange = (newCubeState) => {
+    setCubeStateValue(newCubeState);
+    setCurrentScramble(''); // Clear scramble when manually configuring
+    setSolution('');
+    
+    if (cubeRef.current) {
+      cubeRef.current.updateCubeState(newCubeState);
+    }
+  };
+
+  const handleVideoDetection = (detected) => {
+    try {
+      let newCubeState;
+      if (detected instanceof CubeState) {
+        newCubeState = detected;
+      } else if (typeof detected === 'string') {
+        newCubeState = CubeState.fromString(detected);
+      } else if (detected && typeof detected === 'object' && detected.faces) {
+        // Plain object with faces
+        newCubeState = new CubeState();
+        newCubeState.faces = JSON.parse(JSON.stringify(detected.faces));
+      } else {
+        throw new Error('Unrecognized cube state');
+      }
+
+      handleCubeStateChange(newCubeState);
+    } catch (error) {
+      console.error('Invalid cube state from video detection:', error);
+      alert('Invalid cube state detected from video. Please try again.');
+    }
+  };
+
+  const getStatusColor = () => {
     switch (apiStatus) {
-      case 'available': return 'In-house Solver Available';
-      case 'limited': return 'Limited Functionality';
-      case 'unavailable': return 'Backend Unavailable';
-      default: return 'Checking...';
+      case 'available': return '#98c379'; // Greenish color from image
+      case 'limited': return '#f59e0b';
+      case 'unavailable': return '#ef4444';
+      default: return '#6b7280';
+    }
+  };
+
+  const getStatusText = () => {
+    switch (apiStatus) {
+      case 'available': return '🚀 Kociemba Solver Ready';
+      case 'limited': return '⚡ Limited Mode (Fallback Solver)';
+      case 'unavailable': return '⚠️ Backend Unavailable';
+      default: return '🔍 Checking...';
     }
   };
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>🧩 3D Interactive Rubik's Cube Solver</h1>
-        <div className="api-status" style={{ color: getApiStatusColor() }}>
-          ● {getApiStatusText()}
+      <header className="app-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '2rem' }}>
+        <div className="status-indicator" style={{ color: getStatusColor(), minWidth: 220, textAlign: 'left' }}>
+          {getStatusText()}
         </div>
+        <h1 style={{ margin: 0 }}>3D Interactive Rubik's Cube Solver</h1>
       </header>
-
-      <main className="main-content">
-        <div className="cube-container">
-          <RubiksCube 
-            ref={cubeRef}
-            cubeState={cubeState} 
-            onCubeStateChange={setCubeState}
-          />
+      <main className="app-main">
+        <div className="cube-section">
+          <div className="cube-container">
+            <div className="cube-header">
+              <h2>3D Cube</h2>
+            </div>
+            <div className="cube-display">
+              <RubiksCube ref={cubeRef} cubeState={cubeState} />
+            </div>
+          </div>
         </div>
 
-        <div className="controls-container">
-          <div className="control-section">
-            <h3>🎲 Scramble</h3>
+        <div className="controls-section">
+          <div className="scramble-section">
+            <div className="section-header">
+              <h2>Scramble</h2>
+            </div>
             <div className="scramble-controls">
-              <input
-                type="text"
+              <textarea
                 value={scrambleInput}
                 onChange={(e) => setScrambleInput(e.target.value)}
-                placeholder="Enter scramble (e.g., R U R' U')"
+                placeholder="Enter scramble (e.g., R U R' F R F') or generate random..."
                 className="scramble-input"
+                rows={3}
               />
-              <div className="button-group">
-                <button onClick={generateRandomScramble} disabled={isLoading}>
-                  🎲 Generate Random
+              <div className="scramble-buttons">
+                <button 
+                  onClick={handleRandomScramble}
+                  className="btn btn-outline"
+                  disabled={isLoading}
+                >
+                  Random Scramble
                 </button>
-                <button onClick={applyScramble} disabled={!scrambleInput.trim()}>
-                  ✅ Apply Scramble
+                <button 
+                  onClick={handleApplyScramble}
+                  className="btn btn-primary"
+                  disabled={isLoading || !scrambleInput.trim()}
+                >
+                  Apply Scramble
                 </button>
               </div>
             </div>
-            {currentScramble && (
-              <div className="current-scramble">
-                <strong>Current Scramble:</strong> {currentScramble}
-              </div>
-            )}
           </div>
 
-          <div className="control-section">
-            <h3>🔧 Solve</h3>
-            <div className="solve-controls">
+          <div className="configuration-section">
+            <div className="section-header">
+              <h2>Manual Configuration</h2>
+            </div>
+            <CubeConfigurator 
+              cubeState={cubeState} 
+              onCubeStateChange={handleCubeStateChange}
+            />
+          </div>
+
+          <div className="video-section">
+            <div className="section-header">
+              <h2>Video Detection</h2>
+            </div>
+            <VideoInput onCubeDetected={handleVideoDetection} />
+          </div>
+
+          <div className="solver-section">
+            <div className="section-header">
+              <h2>Solver</h2>
+            </div>
+            <div className="solver-controls">
               <button 
-                onClick={solveCube} 
-                disabled={isLoading || cubeState?.isSolved()}
-                className="solve-button"
+                onClick={handleSolveCube}
+                className="btn btn-success"
+                disabled={isLoading || (cubeState.toString() === new CubeState().toString())}
               >
-                {isLoading ? '🔄 Solving...' : '🧠 Find Solution'}
+                {isLoading ? '🔄 Solving...' : '🎯 Find Solution'}
               </button>
-              <button onClick={resetCube} className="reset-button">
-                🔄 Reset Cube
+              <button 
+                onClick={handleReset}
+                className="btn btn-secondary"
+                disabled={isLoading}
+              >
+                Reset Cube
               </button>
-            </div>
-            
-            {solution && (
-              <div className="solution-container">
-                <div className="solution-header">
-                  <strong>Solution:</strong>
-                  {solutionMoves.length > 0 && (
-                    <span className="move-counter">
-                      ({moveProgress.current}/{moveProgress.total} moves)
-                    </span>
-                  )}
-                </div>
-                <div className="solution-text">{solution}</div>
-                
-                {solutionMoves.length > 0 && (
-                  <div className="solution-controls">
-                    <button 
-                      onClick={animateSolution} 
-                      disabled={isAnimating}
-                      className="animate-button"
-                    >
-                      {isAnimating ? '⏸️ Animating...' : '▶️ Animate Solution'}
-                    </button>
-                    <div className="step-controls">
-                      <button 
-                        onClick={() => stepThroughSolution('prev')}
-                        disabled={currentMoveIndex <= -1}
+              {solution && solution.length > 0 && !solution.includes('Error') && !solution.includes('backend') && (
+                <div className="solution-display">
+                  <h3>Solution:</h3>
+                  <div className="solution-text">
+                    {solution.split(' ').map((move, i) => (
+                      <span
+                        key={i}
+                        className={`move ${i === currentMoveIndex ? 'current' : i < currentMoveIndex ? 'applied' : ''}`}
                       >
-                        ⏮️ Previous
-                      </button>
-                      <button 
-                        onClick={() => stepThroughSolution('next')}
-                        disabled={currentMoveIndex >= solutionMoves.length - 1}
-                      >
-                        ⏭️ Next
-                      </button>
-                    </div>
+                        {move}
+                      </span>
+                    ))}
                   </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="control-section">
-            <h3>⚙️ Manual Configuration</h3>
-            <CubeConfigurator cubeState={cubeState} onCubeStateChange={setCubeState} />
-          </div>
-
-          <div className="control-section">
-            <h3>📹 Video Detection (Experimental)</h3>
-            <VideoInput onCubeStateDetected={setCubeState} />
-          </div>
-        </div>
+                  <div className="solution-controls">
+                    <div className="solution-progress">
+                      <div>Step {moveProgress.current} of {moveProgress.total}</div>
+                      <div className="current-move">
+                        Current Move: {currentMoveIndex >= 0 ? solutionMoves[currentMoveIndex] : 'None'}
+                      </div>
+                    </div>
+                    <button 
+                      onClick={handlePrevMove} 
+                      disabled={isAnimating || currentMoveIndex < 0}
+                    >
+                      Previous
+                    </button>
+                    <button 
+                      onClick={handleNextMove}
+                      disabled={isAnimating || currentMoveIndex + 1 >= solutionMoves.length}
+                    >
+                      Next ({currentMoveIndex + 2 <= solutionMoves.length ? solutionMoves[currentMoveIndex + 1] : ''})
+                    </button>
+                    <button 
+                      onClick={handlePlaySolution}
+                      disabled={isAnimating || currentMoveIndex + 1 >= solutionMoves.length}
+                    >
+                      Play All
+                    </button>
+                  </div>
+                </div>
+              )}
+              {solution && (solution.includes("Error") || solution.includes("backend")) && (
+                <div className="solution-display error">
+                  <p style={{ color: "red", fontWeight: "bold" }}>{solution}</p>
+                </div>
+              )}
+            </div> {/* End of solver-controls */}
+          </div> {/* End of solver-section */}
+        </div> {/* End of controls-section */}
       </main>
-
-      <footer className="App-footer">
-        <p>
-          Built with ❤️ using React + Three.js + In-house Kociemba Algorithm
-        </p>
-        <p>
-          <a href="https://github.com/abhinavdogra21/Rubix-Cube-Solver" target="_blank" rel="noopener noreferrer">
-            🔗 View Source Code
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }
 
 export default App;
+
+
 

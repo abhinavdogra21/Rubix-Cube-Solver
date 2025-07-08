@@ -20,9 +20,11 @@ if [ -n "$sofile" ]; then
   cp "$sofile" src/kociemba_solver.so
   echo "Successfully copied $sofile to src/kociemba_solver.so"
 else
-  echo "Warning: No .so file found, will use Python kociemba fallback"
+  echo "Error: No .so file found. C++ solver will not be available."
+  exit 1 # Exit if the C++ solver is not built
 fi
 
 cd ../..
+
 
 

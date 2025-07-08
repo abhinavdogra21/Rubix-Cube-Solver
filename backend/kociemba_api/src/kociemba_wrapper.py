@@ -7,6 +7,13 @@ import ctypes
 import os
 import sys
 
+# Add RTLD_GLOBAL for proper symbol resolution
+if sys.platform.startswith("linux"):
+    # Equivalent to RTLD_GLOBAL | RTLD_LAZY
+    _RTLD_GLOBAL = 0x00100 | 0x00001
+else:
+    _RTLD_GLOBAL = 0 # Not applicable or not needed on other platforms
+
 class KociembaSolverWrapper:
     def __init__(self):
         self.lib = None
@@ -24,7 +31,8 @@ class KociembaSolverWrapper:
             
             for path in possible_paths:
                 if os.path.exists(path):
-                    self.lib = ctypes.CDLL(path)
+                    # Load with RTLD_GLOBAL to make symbols available to other libraries
+                    self.lib = ctypes.CDLL(path, mode=_RTLD_GLOBAL)
                     break
             
             if self.lib is None:
@@ -224,4 +232,5 @@ if __name__ == "__main__":
     print(f"Cube string is valid: {is_valid}")
     
     print("In-house Kociemba wrapper test completed!")
+
 
