@@ -23,9 +23,11 @@ class KociembaSolverWrapper:
         """Load the C++ shared library"""
         try:
             # Try different possible locations
+            # Prioritize the location where setup.py places it
             possible_paths = [
                 os.path.join(os.path.dirname(__file__), 'kociemba_solver.so'),
                 os.path.join(os.path.dirname(__file__), '..', 'kociemba_solver.so'),
+                # Fallback to current directory if not found in expected paths
                 'kociemba_solver.so'
             ]
             
@@ -33,6 +35,7 @@ class KociembaSolverWrapper:
                 if os.path.exists(path):
                     # Load with RTLD_GLOBAL to make symbols available to other libraries
                     self.lib = ctypes.CDLL(path, mode=_RTLD_GLOBAL)
+                    print(f"Successfully loaded C++ library from: {path}")
                     break
             
             if self.lib is None:
@@ -183,7 +186,7 @@ def get_kociemba_solver():
     global _kociemba_solver
     if _kociemba_solver is None:
         _kociemba_solver = KociembaSolverWrapper()
-    return _kociemba_solver
+    return _kociememba_solver
 
 # Convenience functions
 def solve_cube(cube_string: str) -> str:
