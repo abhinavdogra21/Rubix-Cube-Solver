@@ -5,7 +5,7 @@ import CubeConfigurator from './CubeConfigurator';
 import VideoInput from './VideoInput';
 import './App.css';
 
-const API_BASE_URL = 'http://localhost:5001'; // Changed to use port 5001
+const API_BASE_URL = 'https://rubix-cube-solver.onrender.com'; // Use Render backend
 
 function App() {
   const [scrambleInput, setScrambleInput] = useState('');

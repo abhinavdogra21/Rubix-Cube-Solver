@@ -19,7 +19,11 @@ except ImportError as e:
     KOCIEMBA_AVAILABLE = False
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=[
+    "http://localhost:3000",
+    "https://rubix-cube-solver.vercel.app",
+    "https://rubix-cube-solver-q2ri1oubi-abhinav-dogras-projects.vercel.app"
+])  # Allow local dev and Vercel domains
 
 @app.route('/')
 def index():
