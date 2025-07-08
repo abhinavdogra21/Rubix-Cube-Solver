@@ -11,7 +11,7 @@
 - **Manual Cube Configuration**: Set up any cube state with validation
 - **Video Detection**: (Experimental) Detect cube state from your camera
 - **Cross-platform**: Works on macOS and Windows
-  https://github.com/user-attachments/assets/1454206c-76a8-43ff-884e-bc2f58f39075
+  ![Image](https://github.com/user-attachments/assets/5d6bcfa8-ac16-4e69-9f44-cfa74a99ba6e)
 
 ## ⚠️ Before You Start: Clean Clone & Common Build Issues
 
