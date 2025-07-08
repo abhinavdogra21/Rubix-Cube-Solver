@@ -186,7 +186,7 @@ def get_kociemba_solver():
     global _kociemba_solver
     if _kociemba_solver is None:
         _kociemba_solver = KociembaSolverWrapper()
-    return _kociememba_solver
+    return _kociemba_solver
 
 # Convenience functions
 def solve_cube(cube_string: str) -> str:
