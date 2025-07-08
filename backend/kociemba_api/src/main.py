@@ -73,14 +73,10 @@ def api_solve_cube():
                 'success': False,
                 'error': 'Missing cube_state parameter'
             }), 400
-        
         cube_state = data['cube_state']
-        
-        # Enhanced validation and debugging
         print(f"Received cube state: {cube_state}")
         print(f"Cube state length: {len(cube_state)}")
         print(f"Cube state characters: {set(cube_state)}")
-        
         if KOCIEMBA_AVAILABLE:
             # Validate cube state first
             if not is_valid_cube(cube_state):
@@ -88,16 +84,18 @@ def api_solve_cube():
                     'success': False,
                     'error': 'Invalid cube state: The cube configuration is not valid or solvable'
                 }), 400
-            
-            solution = solve_cube(cube_state)
-            
-            # Check if solution contains an error message
+            try:
+                solution = solve_cube(cube_state)
+            except Exception as e:
+                return jsonify({
+                    'success': False,
+                    'error': f'Internal solver error: {str(e)}'
+                }), 400
             if solution.startswith('Error:'):
                 return jsonify({
                     'success': False,
                     'error': solution
                 }), 400
-            
             return jsonify({
                 'success': True,
                 'solution': solution
@@ -107,7 +105,6 @@ def api_solve_cube():
                 'success': False,
                 'error': 'Kociemba solver not available'
             }), 503
-            
     except Exception as e:
         print(f"Solve error: {str(e)}")
         return jsonify({
@@ -125,11 +122,15 @@ def api_solve_scramble():
                 'success': False,
                 'error': 'Missing scramble parameter'
             }), 400
-        
         scramble = data['scramble']
-        
         if KOCIEMBA_AVAILABLE:
-            solution = solve_scramble(scramble)
+            try:
+                solution = solve_scramble(scramble)
+            except Exception as e:
+                return jsonify({
+                    'success': False,
+                    'error': f'Internal solver error: {str(e)}'
+                }), 400
             return jsonify({
                 'success': True,
                 'solution': solution
@@ -144,26 +145,22 @@ def api_solve_scramble():
                 'L': "L'", "L'": 'L', 'L2': 'L2',
                 'B': "B'", "B'": 'B', 'B2': 'B2'
             }
-            
             moves = scramble.split()
             solution_moves = []
-            
             for move in reversed(moves):
                 if move in move_inverses:
                     solution_moves.append(move_inverses[move])
                 else:
                     solution_moves.append(move)
-            
             solution = ' '.join(solution_moves)
             return jsonify({
                 'success': True,
                 'solution': solution
             })
-            
     except Exception as e:
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': f'Internal server error: {str(e)}'
         }), 500
 
 @app.route('/api/validate', methods=['POST'])
