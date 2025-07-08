@@ -11,8 +11,7 @@
 - **Manual Cube Configuration**: Set up any cube state with validation
 - **Video Detection**: (Experimental) Detect cube state from your camera
 - **Cross-platform**: Works on macOS and Windows
-
-  <video src="https://github.com/abhinavdogra21/Rubix-Cube-Solver/blob/main/rubix_cube_demo-VEED.mp4?raw=true" controls width="700"></video>
+  https://github.com/user-attachments/assets/1454206c-76a8-43ff-884e-bc2f58f39075
 
 ## ⚠️ Before You Start: Clean Clone & Common Build Issues
 
