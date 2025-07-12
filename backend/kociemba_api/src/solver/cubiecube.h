@@ -1,60 +1,68 @@
-#pragma once
+#ifndef CUBIECUBE_H
+#define CUBIECUBE_H
 
-#include <array>
-#include <cstdint>
+#include <string.h>
+#include <stdlib.h>
 
-// Corner positions
-enum Corner {
-    URF, UFL, ULB, UBR, DFR, DLF, DBL, DRB
+#include "corner.h" 
+#include "edge.h"
+
+//Cube on the cubie level
+struct cubiecube {
+    // initialize to Id-Cube
+    // corner permutation
+    corner_t cp[8];
+    // corner orientation
+    signed char co[8];
+    // edge permutation
+    edge_t ep[12];
+    // edge orientation
+    signed char eo[12];
 };
+typedef struct cubiecube cubiecube_t;
 
-// Edge positions
-enum Edge {
-    UR, UF, UL, UB, DR, DF, DL, DB, FR, FL, BL, BR
-};
+// forward declaration
+struct facecube;
 
-class CubieCube {
-public:
-    CubieCube();
-    CubieCube(const std::array<Corner, 8>& cp, const std::array<uint8_t, 8>& co,
-              const std::array<Edge, 12>& ep, const std::array<uint8_t, 12>& eo);
+// this CubieCube array represents the 6 basic cube moves
+cubiecube_t* get_moveCube(void);
+cubiecube_t* get_cubiecube(void);
 
-    // Corner permutation and orientation
-    std::array<Corner, 8> cp;
-    std::array<uint8_t, 8> co;
+// n choose k
+int Cnk(int n, int k);
+void rotateLeft_corner(corner_t* arr, int l, int r);
+void rotateRight_corner(corner_t* arr, int l, int r);
+void rotateLeft_edge(edge_t* arr, int l, int r);
+void rotateRight_edge(edge_t* arr, int l, int r);
+struct facecube* toFaceCube(cubiecube_t* cubiecube);
+void cornerMultiply(cubiecube_t* cubiecube, cubiecube_t* b);
+void edgeMultiply(cubiecube_t* cubiecube, cubiecube_t* b);
+void multiply(cubiecube_t* cubiecube, cubiecube_t* b);
+void invCubieCube(cubiecube_t* cubiecube, cubiecube_t* c);
+short getTwist(cubiecube_t* cubiecube);
+void setTwist(cubiecube_t* cubiecube, short twist);
+short getFlip(cubiecube_t* cubiecube);
+void setFlip(cubiecube_t* cubiecube, short flip);
+short cornerParity(cubiecube_t* cubiecube);
+short edgeParity(cubiecube_t* cubiecube);
+short getFRtoBR(cubiecube_t* cubiecube);
+void setFRtoBR(cubiecube_t* cubiecube, short idx);
+short getURFtoDLF(cubiecube_t* cubiecube);
+void setURFtoDLF(cubiecube_t* cubiecube, short idx);
+int getURtoDF(cubiecube_t* cubiecube);
+void setURtoDF(cubiecube_t* cubiecube, int idx);
 
-    // Edge permutation and orientation
-    std::array<Edge, 12> ep;
-    std::array<uint8_t, 12> eo;
+short getURtoUL(cubiecube_t* cubiecube);
+void setURtoUL(cubiecube_t* cubiecube, short idx);
+short getUBtoDF(cubiecube_t* cubiecube);
+void setUBtoDF(cubiecube_t* cubiecube, short idx);
+int getURFtoDLB(cubiecube_t* cubiecube);
+void setURFtoDLB(cubiecube_t* cubiecube, int idx);
+int getURtoBR(cubiecube_t* cubiecube);
+void setURtoBR(cubiecube_t* cubiecube, int idx);
 
-    // Basic cube operations
-    void cornerMultiply(const CubieCube& b);
-    void edgeMultiply(const CubieCube& b);
-    void multiply(const CubieCube& b);
+int verify(cubiecube_t* cubiecube);
 
-    // Getters for phase 1 and 2 coordinates
-    int getTwist() const;
-    int getFlip() const;
-    int getURFtoDLF() const;
-    int getURtoBR() const;
-    int getURtoDF() const;
-    int getUBtoDF() const;
-    int getCornerParity() const;
-    int getEdgeParity() const;
+int getURtoDF_standalone(short idx1, short idx2);
 
-    // Setters for phase 1 and 2 coordinates
-    void setTwist(int twist);
-    void setFlip(int flip);
-    void setURFtoDLF(int idx);
-    void setURtoBR(int idx);
-    void setURtoDF(int idx);
-    void setUBtoDF(int idx);
-
-    // Move tables
-    static const std::array<CubieCube, 18> moveCube;
-    static const std::array<int, 8> cornerFacelet;
-    static const std::array<int, 12> edgeFacelet;
-
-private:
-    static std::array<CubieCube, 18> initMoveCube();
-}; 
+#endif

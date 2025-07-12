@@ -1,19 +1,139 @@
 
-
 # 3D Interactive Rubik's Cube Solver
 
-## ✨ Features
+## Quick Start: Manual Configuration & Scramble Workflows
 
+This project supports two main workflows:
+
+1. **Manual Configuration**
+   - Configure the cube in the frontend (enter colors/digits)
+   - Click "Solve" (calls `/api/solve`)
+
+2. **Scramble & Solve**
+   - Click "Scramble" (calls `/api/scramble`)
+   - Click "Solve" (calls `/api/solve` with the scrambled state)
+
+Both workflows are fully supported by the backend and frontend. The backend automatically converts digit-based cube states to the letter format required by the solver.
+
+### API Endpoints
+- `/api/solve` (POST): Solve a cube from a cube state string (digits 0-5 or letters U,R,F,D,L,B)
+- `/api/scramble` (GET): Get a random scramble and the corresponding scrambled cube state
+
+### How to Run Everything (macOS/Linux)
+#### Backend
+```sh
+cd backend/kociemba_api
+rm -rf build
+mkdir build && cd build
+cmake ..
+make -j$(sysctl -n hw.ncpu)
+cp kociemba_solver*.so ../src/kociemba_solver.so
+cd ..
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+```
+Backend API: http://localhost:5001
+
+#### Frontend
+```sh
+cd ../../..
+npm install
+npm run dev
+```
+Frontend: http://localhost:5173
+
+### Example API Usage
+Manual configuration:
+```js
+fetch('http://localhost:5001/api/solve', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ cube_state: '000000000111111111222222222333333333444444444555555555' })
+})
+  .then(res => res.json())
+  .then(data => console.log(data.solution));
+```
+
+Scramble workflow:
+```js
+fetch('http://localhost:5001/api/scramble')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data.scramble); // scramble moves
+    console.log(data.cube_state); // scrambled cube state
+    // Now you can send data.cube_state to /api/solve
+  });
+```
+
+---
+
+
+## ✨ Features
 - **3D Interactive Cube Visualization**: Real-time 3D rendering with smooth animations
-- **Optimal Kociemba Algorithm**: Fast, optimal solutions using a C++ backend
+- **Optimal Kociemba Algorithm (C++ backend)**: Fast, optimal solutions
 - **Random Scramble Generation**: Generate and apply realistic scrambles
 - **Step-by-Step Solution Animation**: Visualize and step through the solution
 - **Manual Cube Configuration**: Set up any cube state with validation
 - **Video Detection**: (Experimental) Detect cube state from your camera
 - **Cross-platform**: Works on macOS and Windows
-<video src="https://github.com/user-attachments/assets/c70d1f03-177a-4da5-a45c-88777340712f" controls width="700">
-  Your browser does not support the video tag.
-</video>
+
+## Backend API Endpoints
+- `/api/solve` (POST): Solve a cube from a cube state string (digits 0-5 or letters U,R,F,D,L,B)
+- `/api/scramble` (GET): Get a random scramble and the corresponding scrambled cube state
+
+## How to Run (macOS)
+
+### Prerequisites
+- Node.js 16+
+- Python 3.8+
+- CMake 3.12+
+- C++ Compiler (GCC/Clang/MSVC)
+- pybind11 (install via Homebrew or pip)
+
+### Build & Run Backend
+```sh
+cd backend/kociemba_api
+rm -rf build
+mkdir build && cd build
+cmake ..
+make -j$(sysctl -n hw.ncpu)
+cp kociemba_solver*.so ../src/kociemba_solver.so
+cd ..
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+```
+Backend API: http://localhost:5001
+
+### Build & Run Frontend
+```sh
+cd ../../..
+# (from project root)
+npm install
+npm run dev
+```
+Frontend: http://localhost:5173
+
+## Usage
+- **Manual Configuration:**
+  - Configure the cube in the frontend (enter colors/digits)
+  - Click "Solve" (calls `/api/solve`)
+- **Scramble & Solve:**
+  - Click "Scramble" (calls `/api/scramble`)
+  - Click "Solve" (calls `/api/solve` with scrambled state)
+
+## Troubleshooting
+- If you see CMake or Python errors, ensure correct Python version and headers.
+- Do not commit build artifacts or .so files to GitHub.
+- See `.gitignore` for details.
+
+## Notes
+- The backend supports both manual configuration and scramble workflows.
+- Only `/api/solve` and `/api/scramble` endpoints are required for frontend integration.
+- The backend does not animate or simulate moves; frontend handles visualization.
 
 
 ## ⚠️ Before You Start: Clean Clone & Common Build Issues
@@ -208,6 +328,30 @@ The backend should now run at http://localhost:5001
 If you have further issues, see the Troubleshooting section above or open an issue.
 
 ---
+
+### Frontend/Backend Integration
+
+Your frontend should send the cube state as a string of 54 digits (0-5), where each digit represents a color:
+
+- 0: U (Up)
+- 1: R (Right)
+- 2: F (Front)
+- 3: D (Down)
+- 4: L (Left)
+- 5: B (Back)
+
+The backend will automatically convert this digit string to the letter format required by the solver. You do not need to convert it in the frontend.
+
+Example API call:
+```js
+fetch('http://localhost:5001/api/solve', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ cube_state: '000000000111111111222222222333333333444444444555555555' })
+})
+  .then(res => res.json())
+  .then(data => console.log(data.solution));
+```
 
 
 

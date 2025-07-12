@@ -1,3 +1,4 @@
+// https://github.com/abhinavdogra21/Rubix-Cube-Solver
 import React, { useState, useEffect, useRef } from 'react';
 import RubiksCube from './RubiksCube';
 import { CubeState } from './cubeState';
@@ -240,22 +241,18 @@ function App() {
     setIsLoading(true);
     try {
       if (apiStatus === 'available') {
-        // Try backend solver first
-        const endpoint = effectiveScramble ? '/api/solve_scramble' : '/api/solve';
-        const payload = effectiveScramble 
-          ? { scramble: effectiveScramble } 
-          : { cube_state: cubeStateToDigits(cubeState) };
-
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        // Always use /api/solve for both manual and scramble workflows
+        const payload = { cube_state: cubeStateToDigits(cubeState) };
+        const response = await fetch(`${API_BASE_URL}/api/solve`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload),
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success && data.solution) {
           const moves = data.solution.trim().split(/\s+/).filter(move => move.length > 0);
           setSolution(data.solution);

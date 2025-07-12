@@ -1,6 +1,4 @@
 cmake_minimum_required(VERSION 3.12)
-# Disable strip globally to avoid shell errors with spaces/parentheses in path
-set(CMAKE_STRIP "")
 project(kociemba_solver)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -19,7 +17,4 @@ pybind11_add_module(kociemba_solver
     kociemba_api/src/kociemba_wrapper.cpp
 )# Link the solver library
 target_link_libraries(kociemba_solver PRIVATE kociemba_lib)
-
-# Set properties
-target_compile_definitions(kociemba_solver PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO})
 
