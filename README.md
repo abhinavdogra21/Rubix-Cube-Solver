@@ -18,6 +18,9 @@ Both workflows are fully supported by the backend and frontend. The backend auto
 ### API Endpoints
 - `/api/solve` (POST): Solve a cube from a cube state string (digits 0-5 or letters U,R,F,D,L,B)
 - `/api/scramble` (GET): Get a random scramble and the corresponding scrambled cube state
+- <video src="https://github.com/user-attachments/assets/c70d1f03-177a-4da5-a45c-88777340712f" controls width="700">
+  Your browser does not support the video tag.
+</video>
 
 ### How to Run Everything (macOS/Linux)
 #### Backend
