@@ -22,26 +22,45 @@ Both workflows are fully supported by the backend and frontend. The backend auto
   Your browser does not support the video tag.
 </video>
 
+npm install
+npm run dev
+
 ### How to Run Everything (macOS/Linux)
-#### Backend
+
+
+#### 1. Clean up all cache and build artifacts (recommended before every fresh build):
 ```sh
-cd backend/kociemba_api
+rm -rf cache
+rm -rf backend/build
+rm -rf backend/kociemba_api/build
+rm -rf backend/kociemba_api/src/solver/cache
+find . -name "kociemba_solver*.so" -delete
+```
+
+
+#### 2. Build and run the backend (C++/Python module):
+```sh
+cd backend
 rm -rf build
 mkdir build && cd build
 cmake ..
 make -j$(sysctl -n hw.ncpu)
-cp kociemba_solver*.so ../src/kociemba_solver.so
-cd ..
+# Copy the built Python module to where main.py expects it
+cp kociemba_solver*.so ../kociemba_api/src/
+cd ../kociemba_api
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python src/main.py
+cd src
+python main.py
 ```
 Backend API: http://localhost:5001
 
-#### Frontend
+> **Note:** The only CMakeLists.txt you need for backend build is in `backend/`. Ignore or delete any CMakeLists.txt or Makefile in `backend/src` or other subfolders.
+
+#### 3. Start the frontend:
 ```sh
-cd ../../..
+cd ../../../
 npm install
 npm run dev
 ```

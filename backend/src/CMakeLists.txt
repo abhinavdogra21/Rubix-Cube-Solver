@@ -1,4 +1,4 @@
-
+## This file is intentionally deleted. Use ../CMakeLists.txt for backend build.
 cmake_minimum_required(VERSION 3.12)
 project(KociembaCubeSolver)
 

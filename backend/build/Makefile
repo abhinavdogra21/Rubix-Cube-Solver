@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend"
+CMAKE_SOURCE_DIR = /Users/abhinavdogra/Desktop/Projects/Rubix-Cube-Solver/backend
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build"
+CMAKE_BINARY_DIR = /Users/abhinavdogra/Desktop/Projects/Rubix-Cube-Solver/backend/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build//CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abhinavdogra/Desktop/Projects/Rubix-Cube-Solver/backend/build/CMakeFiles /Users/abhinavdogra/Desktop/Projects/Rubix-Cube-Solver/backend/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/abhinavdogra/Desktop/Projects/rubiks-cube-app (github) /backend/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abhinavdogra/Desktop/Projects/Rubix-Cube-Solver/backend/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -142,30 +142,6 @@ kociemba_solver/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_solver.dir/build.make CMakeFiles/kociemba_solver.dir/build
 .PHONY : kociemba_solver/fast
 
-kociemba_api/src/kociemba_solver.o: kociemba_api/src/kociemba_solver.cpp.o
-.PHONY : kociemba_api/src/kociemba_solver.o
-
-# target to build an object file
-kociemba_api/src/kociemba_solver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.o
-.PHONY : kociemba_api/src/kociemba_solver.cpp.o
-
-kociemba_api/src/kociemba_solver.i: kociemba_api/src/kociemba_solver.cpp.i
-.PHONY : kociemba_api/src/kociemba_solver.i
-
-# target to preprocess a source file
-kociemba_api/src/kociemba_solver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.i
-.PHONY : kociemba_api/src/kociemba_solver.cpp.i
-
-kociemba_api/src/kociemba_solver.s: kociemba_api/src/kociemba_solver.cpp.s
-.PHONY : kociemba_api/src/kociemba_solver.s
-
-# target to generate assembly for a file
-kociemba_api/src/kociemba_solver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/kociemba_solver.cpp.s
-.PHONY : kociemba_api/src/kociemba_solver.cpp.s
-
 kociemba_api/src/kociemba_wrapper.o: kociemba_api/src/kociemba_wrapper.cpp.o
 .PHONY : kociemba_api/src/kociemba_wrapper.o
 
@@ -190,6 +166,174 @@ kociemba_api/src/kociemba_wrapper.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_solver.dir/build.make CMakeFiles/kociemba_solver.dir/kociemba_api/src/kociemba_wrapper.cpp.s
 .PHONY : kociemba_api/src/kociemba_wrapper.cpp.s
 
+kociemba_api/src/solver/coordcube.o: kociemba_api/src/solver/coordcube.cpp.o
+.PHONY : kociemba_api/src/solver/coordcube.o
+
+# target to build an object file
+kociemba_api/src/solver/coordcube.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/coordcube.cpp.o
+.PHONY : kociemba_api/src/solver/coordcube.cpp.o
+
+kociemba_api/src/solver/coordcube.i: kociemba_api/src/solver/coordcube.cpp.i
+.PHONY : kociemba_api/src/solver/coordcube.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/coordcube.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/coordcube.cpp.i
+.PHONY : kociemba_api/src/solver/coordcube.cpp.i
+
+kociemba_api/src/solver/coordcube.s: kociemba_api/src/solver/coordcube.cpp.s
+.PHONY : kociemba_api/src/solver/coordcube.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/coordcube.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/coordcube.cpp.s
+.PHONY : kociemba_api/src/solver/coordcube.cpp.s
+
+kociemba_api/src/solver/cubiecube.o: kociemba_api/src/solver/cubiecube.cpp.o
+.PHONY : kociemba_api/src/solver/cubiecube.o
+
+# target to build an object file
+kociemba_api/src/solver/cubiecube.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/cubiecube.cpp.o
+.PHONY : kociemba_api/src/solver/cubiecube.cpp.o
+
+kociemba_api/src/solver/cubiecube.i: kociemba_api/src/solver/cubiecube.cpp.i
+.PHONY : kociemba_api/src/solver/cubiecube.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/cubiecube.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/cubiecube.cpp.i
+.PHONY : kociemba_api/src/solver/cubiecube.cpp.i
+
+kociemba_api/src/solver/cubiecube.s: kociemba_api/src/solver/cubiecube.cpp.s
+.PHONY : kociemba_api/src/solver/cubiecube.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/cubiecube.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/cubiecube.cpp.s
+.PHONY : kociemba_api/src/solver/cubiecube.cpp.s
+
+kociemba_api/src/solver/facecube.o: kociemba_api/src/solver/facecube.cpp.o
+.PHONY : kociemba_api/src/solver/facecube.o
+
+# target to build an object file
+kociemba_api/src/solver/facecube.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/facecube.cpp.o
+.PHONY : kociemba_api/src/solver/facecube.cpp.o
+
+kociemba_api/src/solver/facecube.i: kociemba_api/src/solver/facecube.cpp.i
+.PHONY : kociemba_api/src/solver/facecube.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/facecube.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/facecube.cpp.i
+.PHONY : kociemba_api/src/solver/facecube.cpp.i
+
+kociemba_api/src/solver/facecube.s: kociemba_api/src/solver/facecube.cpp.s
+.PHONY : kociemba_api/src/solver/facecube.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/facecube.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/facecube.cpp.s
+.PHONY : kociemba_api/src/solver/facecube.cpp.s
+
+kociemba_api/src/solver/prunetable_helpers.o: kociemba_api/src/solver/prunetable_helpers.cpp.o
+.PHONY : kociemba_api/src/solver/prunetable_helpers.o
+
+# target to build an object file
+kociemba_api/src/solver/prunetable_helpers.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/prunetable_helpers.cpp.o
+.PHONY : kociemba_api/src/solver/prunetable_helpers.cpp.o
+
+kociemba_api/src/solver/prunetable_helpers.i: kociemba_api/src/solver/prunetable_helpers.cpp.i
+.PHONY : kociemba_api/src/solver/prunetable_helpers.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/prunetable_helpers.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/prunetable_helpers.cpp.i
+.PHONY : kociemba_api/src/solver/prunetable_helpers.cpp.i
+
+kociemba_api/src/solver/prunetable_helpers.s: kociemba_api/src/solver/prunetable_helpers.cpp.s
+.PHONY : kociemba_api/src/solver/prunetable_helpers.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/prunetable_helpers.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/prunetable_helpers.cpp.s
+.PHONY : kociemba_api/src/solver/prunetable_helpers.cpp.s
+
+kociemba_api/src/solver/random.o: kociemba_api/src/solver/random.cpp.o
+.PHONY : kociemba_api/src/solver/random.o
+
+# target to build an object file
+kociemba_api/src/solver/random.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/random.cpp.o
+.PHONY : kociemba_api/src/solver/random.cpp.o
+
+kociemba_api/src/solver/random.i: kociemba_api/src/solver/random.cpp.i
+.PHONY : kociemba_api/src/solver/random.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/random.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/random.cpp.i
+.PHONY : kociemba_api/src/solver/random.cpp.i
+
+kociemba_api/src/solver/random.s: kociemba_api/src/solver/random.cpp.s
+.PHONY : kociemba_api/src/solver/random.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/random.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/random.cpp.s
+.PHONY : kociemba_api/src/solver/random.cpp.s
+
+kociemba_api/src/solver/search.o: kociemba_api/src/solver/search.cpp.o
+.PHONY : kociemba_api/src/solver/search.o
+
+# target to build an object file
+kociemba_api/src/solver/search.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/search.cpp.o
+.PHONY : kociemba_api/src/solver/search.cpp.o
+
+kociemba_api/src/solver/search.i: kociemba_api/src/solver/search.cpp.i
+.PHONY : kociemba_api/src/solver/search.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/search.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/search.cpp.i
+.PHONY : kociemba_api/src/solver/search.cpp.i
+
+kociemba_api/src/solver/search.s: kociemba_api/src/solver/search.cpp.s
+.PHONY : kociemba_api/src/solver/search.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/search.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/search.cpp.s
+.PHONY : kociemba_api/src/solver/search.cpp.s
+
+kociemba_api/src/solver/solve.o: kociemba_api/src/solver/solve.cpp.o
+.PHONY : kociemba_api/src/solver/solve.o
+
+# target to build an object file
+kociemba_api/src/solver/solve.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/solve.cpp.o
+.PHONY : kociemba_api/src/solver/solve.cpp.o
+
+kociemba_api/src/solver/solve.i: kociemba_api/src/solver/solve.cpp.i
+.PHONY : kociemba_api/src/solver/solve.i
+
+# target to preprocess a source file
+kociemba_api/src/solver/solve.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/solve.cpp.i
+.PHONY : kociemba_api/src/solver/solve.cpp.i
+
+kociemba_api/src/solver/solve.s: kociemba_api/src/solver/solve.cpp.s
+.PHONY : kociemba_api/src/solver/solve.s
+
+# target to generate assembly for a file
+kociemba_api/src/solver/solve.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kociemba_lib.dir/build.make CMakeFiles/kociemba_lib.dir/kociemba_api/src/solver/solve.cpp.s
+.PHONY : kociemba_api/src/solver/solve.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -200,12 +344,30 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... kociemba_lib"
 	@echo "... kociemba_solver"
-	@echo "... kociemba_api/src/kociemba_solver.o"
-	@echo "... kociemba_api/src/kociemba_solver.i"
-	@echo "... kociemba_api/src/kociemba_solver.s"
 	@echo "... kociemba_api/src/kociemba_wrapper.o"
 	@echo "... kociemba_api/src/kociemba_wrapper.i"
 	@echo "... kociemba_api/src/kociemba_wrapper.s"
+	@echo "... kociemba_api/src/solver/coordcube.o"
+	@echo "... kociemba_api/src/solver/coordcube.i"
+	@echo "... kociemba_api/src/solver/coordcube.s"
+	@echo "... kociemba_api/src/solver/cubiecube.o"
+	@echo "... kociemba_api/src/solver/cubiecube.i"
+	@echo "... kociemba_api/src/solver/cubiecube.s"
+	@echo "... kociemba_api/src/solver/facecube.o"
+	@echo "... kociemba_api/src/solver/facecube.i"
+	@echo "... kociemba_api/src/solver/facecube.s"
+	@echo "... kociemba_api/src/solver/prunetable_helpers.o"
+	@echo "... kociemba_api/src/solver/prunetable_helpers.i"
+	@echo "... kociemba_api/src/solver/prunetable_helpers.s"
+	@echo "... kociemba_api/src/solver/random.o"
+	@echo "... kociemba_api/src/solver/random.i"
+	@echo "... kociemba_api/src/solver/random.s"
+	@echo "... kociemba_api/src/solver/search.o"
+	@echo "... kociemba_api/src/solver/search.i"
+	@echo "... kociemba_api/src/solver/search.s"
+	@echo "... kociemba_api/src/solver/solve.o"
+	@echo "... kociemba_api/src/solver/solve.i"
+	@echo "... kociemba_api/src/solver/solve.s"
 .PHONY : help
 
 

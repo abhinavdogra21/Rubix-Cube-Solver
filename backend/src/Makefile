@@ -1,5 +1,5 @@
 # Makefile for Kociemba Cube Solver
-
+## This file is intentionally deleted. Use CMake for backend build.
 CXX = g++
 CXXFLAGS = -std=c++17 -O3 -fPIC -Wall -Wextra
 PYTHON_INCLUDE = $(shell python3 -c "import sysconfig; print(sysconfig.get_path('include'))")

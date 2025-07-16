@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -O3 -fPIC -Wall -Wextra
-
+## This file is intentionally deleted. Use CMake for backend build.
 PYTHON_INCLUDE = $(shell python3-config --includes)
 PYTHON_LIBS = $(shell python3-config --libs)
 
