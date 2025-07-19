@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { CubeState } from './cubeState';
 import './CubeConfigurator.css';
 
-function CubeConfigurator({ cubeState, onCubeStateChange }) {
+function CubeConfigurator({ cubeState, onCubeStateChange, fromVideo = false }) {
   const [selectedColor, setSelectedColor] = useState('W');
   const [localCubeState, setLocalCubeState] = useState(cubeState);
   const [error, setError] = useState('');
@@ -18,10 +18,11 @@ function CubeConfigurator({ cubeState, onCubeStateChange }) {
   ];
 
   useEffect(() => {
-    setLocalCubeState(new CubeState());
+    const newLocalCubeState = new CubeState();
     Object.entries(cubeState.faces).forEach(([face, colors]) => {
-      localCubeState.faces[face] = [...colors];
+      newLocalCubeState.faces[face] = [...colors];
     });
+    setLocalCubeState(newLocalCubeState);
   }, [cubeState]);
 
   const validateConfiguration = () => {
@@ -176,21 +177,56 @@ function CubeConfigurator({ cubeState, onCubeStateChange }) {
   const renderFace = (faceName, faceData, className) => {
     const face = faceName.toLowerCase();
     const isCenter = (index) => index === 4;
+    
+    // Expected center colors for reference
+    const expectedCenters = {
+      'front': 'G',
+      'right': 'R', 
+      'back': 'B',
+      'left': 'O',
+      'top': 'W',
+      'bottom': 'Y'
+    };
+    
     return (
       <div className={`cube-face ${className}`}>
-        <div className="face-label">{faceName}</div>
+        <div className="face-label">
+          {faceName}
+          {expectedCenters[face] && (
+            <span style={{ 
+              fontSize: '0.8em', 
+              opacity: 0.7, 
+              marginLeft: '4px',
+              color: colors.find(c => c.key === expectedCenters[face])?.color || '#666'
+            }}>
+              ({colors.find(c => c.key === expectedCenters[face])?.name || expectedCenters[face]})
+            </span>
+          )}
+        </div>
         <div className="face-grid">
-          {faceData.map((color, index) => (
-            <div
-              key={index}
-              className={`face-square ${isCenter(index) ? 'center' : ''}`}
-              style={{
-                backgroundColor: colors.find(c => c.key === color)?.color || '#333',
-                cursor: 'pointer'
-              }}
-              onClick={() => handleSquareClick(face, index)}
-            />
-          ))}
+          {faceData.map((color, index) => {
+            const isCenterSquare = isCenter(index);
+            const expectedCenter = expectedCenters[face];
+            const centerCorrect = !isCenterSquare || color === expectedCenter;
+            
+            return (
+              <div
+                key={index}
+                className={`face-square ${isCenterSquare ? 'center' : ''}`}
+                style={{
+                  backgroundColor: colors.find(c => c.key === color)?.color || '#333',
+                  cursor: 'pointer',
+                  border: isCenterSquare && !centerCorrect ? '2px solid #ef4444' : 
+                          isCenterSquare ? '2px solid rgba(255,255,255,0.3)' : 
+                          '1px solid rgba(255,255,255,0.1)'
+                }}
+                onClick={() => handleSquareClick(face, index)}
+                title={isCenterSquare && !centerCorrect ? 
+                  `Center should be ${colors.find(c => c.key === expectedCenter)?.name}` : 
+                  colors.find(c => c.key === color)?.name}
+              />
+            );
+          })}
         </div>
       </div>
     );
@@ -198,6 +234,24 @@ function CubeConfigurator({ cubeState, onCubeStateChange }) {
 
   return (
     <div className="cube-configurator">
+      {fromVideo && (
+        <div style={{ 
+          background: 'rgba(152, 195, 121, 0.1)', 
+          border: '1px solid rgba(152, 195, 121, 0.3)',
+          borderRadius: '8px',
+          padding: '12px',
+          marginBottom: '16px'
+        }}>
+          <div style={{ color: '#98c379', fontWeight: '500', marginBottom: '8px' }}>
+            📷 Detected from video capture
+          </div>
+          <div style={{ fontSize: '0.9em', opacity: '0.9' }}>
+            Review the configuration below. Click on any square to change its color if the detection was incorrect.
+            The center squares show the expected colors for each face.
+          </div>
+        </div>
+      )}
+      
       <div className="color-palette">
         <div className="palette-label">Select Color:</div>
         <div className="color-options">

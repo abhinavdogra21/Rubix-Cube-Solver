@@ -19,6 +19,8 @@ function App() {
   const [currentMoveIndex, setCurrentMoveIndex] = useState(-1);
   const [isAnimating, setIsAnimating] = useState(false);
   const [solutionMoves, setSolutionMoves] = useState([]);
+  const [showConfiguration, setShowConfiguration] = useState(false);
+  const [detectedFromVideo, setDetectedFromVideo] = useState(false);
   const [moveProgress, setMoveProgress] = useState({ current: 0, total: 0 });
 
   // Check API status on component mount
@@ -302,6 +304,8 @@ function App() {
           setMoveProgress({ current: 0, total: 0 });
         }
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -417,6 +421,7 @@ function App() {
     setCubeStateValue(newCubeState);
     setCurrentScramble(''); // Clear scramble when manually configuring
     setSolution('');
+    setDetectedFromVideo(false); // Clear video detection flag
     
     if (cubeRef.current) {
       cubeRef.current.updateCubeState(newCubeState);
@@ -438,10 +443,21 @@ function App() {
         throw new Error('Unrecognized cube state');
       }
 
-      handleCubeStateChange(newCubeState);
+      // Set the detected state and open configuration for manual corrections
+      setCubeStateValue(newCubeState);
+      setDetectedFromVideo(true);
+      setShowConfiguration(true);
+      
+      if (cubeRef.current) {
+        cubeRef.current.updateCubeState(newCubeState);
+      }
+      
+      // Show success message
+      alert('Cube state detected! Review and correct any errors in the Manual Configuration section below, then click "Apply Configuration".');
+      
     } catch (error) {
       console.error('Invalid cube state from video detection:', error);
-      alert('Invalid cube state detected from video. Please try again.');
+      alert('Invalid cube state detected from video. Please try again with better lighting and cube positioning.');
     }
   };
 
@@ -516,13 +532,33 @@ function App() {
           </div>
 
           <div className="configuration-section">
-            <div className="section-header">
-              <h2>Manual Configuration</h2>
+            <div className="section-header" onClick={() => setShowConfiguration(!showConfiguration)} style={{ cursor: 'pointer' }}>
+              <h2>
+                Manual Configuration 
+                <span style={{ fontSize: '0.8em', marginLeft: '10px' }}>
+                  {showConfiguration ? '▼ Hide' : '▶ Show'}
+                </span>
+                {detectedFromVideo && (
+                  <span style={{ 
+                    fontSize: '0.7em', 
+                    color: '#98c379', 
+                    marginLeft: '10px',
+                    background: 'rgba(152, 195, 121, 0.2)',
+                    padding: '2px 8px',
+                    borderRadius: '4px'
+                  }}>
+                    📷 From Video - Review & Correct
+                  </span>
+                )}
+              </h2>
             </div>
-            <CubeConfigurator 
-              cubeState={cubeState} 
-              onCubeStateChange={handleCubeStateChange}
-            />
+            {showConfiguration && (
+              <CubeConfigurator 
+                cubeState={cubeState} 
+                onCubeStateChange={handleCubeStateChange}
+                fromVideo={detectedFromVideo}
+              />
+            )}
           </div>
 
           <div className="video-section">
@@ -540,7 +576,7 @@ function App() {
               <button 
                 onClick={handleSolveCube}
                 className="btn btn-success"
-                disabled={isLoading || (cubeState.toString() === new CubeState().toString())}
+                disabled={isLoading}
               >
                 {isLoading ? '🔄 Solving...' : '🎯 Find Solution'}
               </button>

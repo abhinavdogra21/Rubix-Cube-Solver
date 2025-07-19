@@ -2,15 +2,17 @@
 // Cube state management and move logic
 export class CubeState {
   constructor() {
-    // Initialize cube in solved state
+    // Initialize cube in solved state (Standard cube orientation)
     // Each face is represented as a 3x3 array (0-8 indices)
+    // Standard orientation: Green front, White top, Red right, Blue left, Yellow back, Orange bottom
+    // Standard cube colors: Green front, White top, Red right
     this.faces = {
-      front: ["W", "W", "W", "W", "W", "W", "W", "W", "W"], // White
-      back: ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"], // Yellow
-      left: ["G", "G", "G", "G", "G", "G", "G", "G", "G"], // Green
-      right: ["B", "B", "B", "B", "B", "B", "B", "B", "B"], // Blue
-      top: ["R", "R", "R", "R", "R", "R", "R", "R", "R"], // Red
-      bottom: ["O", "O", "O", "O", "O", "O", "O", "O", "O"], // Orange
+      front: ["G", "G", "G", "G", "G", "G", "G", "G", "G"], // Green
+      back: ["B", "B", "B", "B", "B", "B", "B", "B", "B"], // Blue  
+      left: ["O", "O", "O", "O", "O", "O", "O", "O", "O"], // Orange
+      right: ["R", "R", "R", "R", "R", "R", "R", "R", "R"], // Red
+      top: ["W", "W", "W", "W", "W", "W", "W", "W", "W"], // White
+      bottom: ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"], // Yellow
     };
   }
 
@@ -23,14 +25,14 @@ export class CubeState {
     const newCube = new CubeState();
     const validChars = new Set(['U', 'L', 'F', 'R', 'B', 'D']);
     
-    // Map characters to colors based on common Rubik's Cube notation
+    // Map characters to colors based on standard Rubik's Cube notation
     const charToColor = {
-      U: "R", // Up (Red)
-      L: "G", // Left (Green)
-      F: "W", // Front (White)
-      R: "B", // Right (Blue)
-      B: "Y", // Back (Yellow)
-      D: "O", // Down (Orange)
+      U: "W", // Up (White)
+      L: "O", // Left (Orange)
+      F: "G", // Front (Green)
+      R: "R", // Right (Red)
+      B: "B", // Back (Blue)
+      D: "Y", // Down (Yellow)
     };
 
     // First validate all characters
@@ -74,13 +76,13 @@ export class CubeState {
       back: newCube.faces.back[4]
     };
 
-    // Check if centers are correct colors
-    if (centers.front !== "W") throw new Error("Front center must be White");
-    if (centers.back !== "Y") throw new Error("Back center must be Yellow");
-    if (centers.left !== "G") throw new Error("Left center must be Green");
-    if (centers.right !== "B") throw new Error("Right center must be Blue");
-    if (centers.top !== "R") throw new Error("Top center must be Red");
-    if (centers.bottom !== "O") throw new Error("Bottom center must be Orange");
+    // Check if centers are correct colors (Standard orientation)
+    if (centers.front !== "G") throw new Error("Front center must be Green");
+    if (centers.back !== "B") throw new Error("Back center must be Blue");
+    if (centers.left !== "O") throw new Error("Left center must be Orange");
+    if (centers.right !== "R") throw new Error("Right center must be Red");
+    if (centers.top !== "W") throw new Error("Top center must be White");
+    if (centers.bottom !== "Y") throw new Error("Bottom center must be Yellow");
 
     return newCube;
   }
@@ -89,12 +91,12 @@ export class CubeState {
   toString() {
     const facesOrder = ["top", "right", "front", "bottom", "left", "back"];
     const colorToChar = {
-      "W": "F", // Front (White)
-      "Y": "B", // Back (Yellow)
-      "G": "L", // Left (Green)
-      "B": "R", // Right (Blue)
-      "R": "U", // Up (Red)
-      "O": "D", // Down (Orange)
+      "G": "F", // Front (Green)
+      "B": "B", // Back (Blue)
+      "O": "L", // Left (Orange)
+      "R": "R", // Right (Red)
+      "W": "U", // Up (White)
+      "Y": "D", // Down (Yellow)
     };
 
     let stateString = "";
