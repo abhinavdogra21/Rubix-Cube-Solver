@@ -53,6 +53,12 @@ const RubiksCube = forwardRef(({ cubeState }, ref) => {
       console.warn('Invalid cube state provided to updateCubeColors');
       return;
     }
+    // Helper to normalize color keys and provide default gray
+    const getColorHex = (char) => {
+      if (!char) return 0x333333;
+      const key = char.toUpperCase();
+      return faceColors[key] || 0x333333;
+    };
     const faces = cubeStateObj.faces;
     currentStateRef.current = cubeStateObj;
     // Ensure cube group is visible
@@ -72,40 +78,40 @@ const RubiksCube = forwardRef(({ cubeState }, ref) => {
       // Right face (x = 1)
       if (pos.x === 1) {
         const row = 1 - pos.y;
-        const col = 1 + pos.z;
+        const col = 1 - pos.z;
         const index = row * 3 + col;
         if (faces.right[index]) {
-          materials[0].color.setHex(faceColors[faces.right[index]] || 0x333333);
+          materials[0].color.setHex(getColorHex(faces.right[index]));
           materials[0].needsUpdate = true;
         }
       }
       // Left face (x = -1)
       if (pos.x === -1) {
         const row = 1 - pos.y;
-        const col = 1 - pos.z;
+        const col = 1 + pos.z;
         const index = row * 3 + col;
         if (faces.left[index]) {
-          materials[1].color.setHex(faceColors[faces.left[index]] || 0x333333);
+          materials[1].color.setHex(getColorHex(faces.left[index]));
           materials[1].needsUpdate = true;
         }
       }
       // Top face (y = 1)
       if (pos.y === 1) {
-        const row = 1 - pos.z;
+        const row = 1 + pos.z;
         const col = 1 + pos.x;
         const index = row * 3 + col;
         if (faces.top[index]) {
-          materials[2].color.setHex(faceColors[faces.top[index]] || 0x333333);
+          materials[2].color.setHex(getColorHex(faces.top[index]));
           materials[2].needsUpdate = true;
         }
       }
       // Bottom face (y = -1)
       if (pos.y === -1) {
-        const row = 1 + pos.z;
+        const row = 1 - pos.z;
         const col = 1 + pos.x;
         const index = row * 3 + col;
         if (faces.bottom[index]) {
-          materials[3].color.setHex(faceColors[faces.bottom[index]] || 0x333333);
+          materials[3].color.setHex(getColorHex(faces.bottom[index]));
           materials[3].needsUpdate = true;
         }
       }
@@ -115,7 +121,7 @@ const RubiksCube = forwardRef(({ cubeState }, ref) => {
         const col = 1 + pos.x;
         const index = row * 3 + col;
         if (faces.front[index]) {
-          materials[4].color.setHex(faceColors[faces.front[index]] || 0x333333);
+          materials[4].color.setHex(getColorHex(faces.front[index]));
           materials[4].needsUpdate = true;
         }
       }
@@ -125,7 +131,7 @@ const RubiksCube = forwardRef(({ cubeState }, ref) => {
         const col = 1 - pos.x;
         const index = row * 3 + col;
         if (faces.back[index]) {
-          materials[5].color.setHex(faceColors[faces.back[index]] || 0x333333);
+          materials[5].color.setHex(getColorHex(faces.back[index]));
           materials[5].needsUpdate = true;
         }
       }
