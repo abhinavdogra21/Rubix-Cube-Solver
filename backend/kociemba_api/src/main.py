@@ -76,30 +76,6 @@ def api_solve_cube():
             'error': f'Internal server error: {str(e)}'
         }), 500
 
-# Helper: apply scramble to solved cube state
-# Faces: U=0, R=1, F=2, D=3, L=4, B=5
-SOLVED_CUBE = '000000000111111111222222222333333333444444444555555555'
-MOVE_MAP = {
-    "U": [0,1,2,3,4,5,6,7,8], "R": [9,10,11,12,13,14,15,16,17], "F": [18,19,20,21,22,23,24,25,26],
-    "D": [27,28,29,30,31,32,33,34,35], "L": [36,37,38,39,40,41,42,43,44], "B": [45,46,47,48,49,50,51,52,53]
-}
-# This is a placeholder. For a real scramble, you need a full cube simulator.
-def apply_scramble(cube_state, scramble_moves):
-    # For now, just return the solved state (real implementation would permute stickers)
-    return cube_state
-
-@app.route('/api/scramble', methods=['GET'])
-def api_generate_scramble():
-    """Generate a random scramble and scrambled cube state"""
-    moves = ['U', "U'", 'U2', 'R', "R'", 'R2', 'F', "F'", 'F2', 'D', "D'", 'D2', 'L', "L'", 'L2', 'B', "B'", 'B2']
-    scramble = ' '.join(random.choices(moves, k=25))
-    scramble_moves = scramble.split()
-    scrambled_cube_state = apply_scramble(SOLVED_CUBE, scramble_moves)
-    return jsonify({
-        'success': True,
-        'scramble': scramble,
-        'cube_state': scrambled_cube_state
-    })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
