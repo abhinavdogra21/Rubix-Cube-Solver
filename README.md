@@ -114,7 +114,6 @@ python src\main.py
 
 ### API Endpoints
 - `/api/solve` (POST): Solve cube from state string
-- `/api/scramble` (GET): Generate random scramble
 
 ### Example API Usage
 ```js
@@ -127,13 +126,6 @@ fetch('http://localhost:5001/api/solve', {
   .then(res => res.json())
   .then(data => console.log(data.solution));
 
-// Get a random scramble
-fetch('http://localhost:5001/api/scramble')
-  .then(res => res.json())
-  .then(data => {
-    console.log(data.scramble);     // Scramble moves
-    console.log(data.cube_state);   // Scrambled state
-  });
 ```
 
 ## 🔧 Cube State Format
