@@ -372,34 +372,34 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Python
-FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/opt/homebrew/Frameworks/Python.framework/Versions/3.13/bin/python3.13][/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13][found components: Interpreter Development.Module Development.Embed ][v3.13.5(3.8)]
+FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/opt/homebrew/Frameworks/Python.framework/Versions/3.11/bin/python3.11][/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11][found components: Interpreter Development.Module Development.Embed ][v3.11.13(3.8)]
 //Test HAS_FLTO_THIN
 HAS_FLTO_THIN:INTERNAL=1
 //Python executable during the last CMake run
-PYBIND11_PYTHON_EXECUTABLE_LAST:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.13/bin/python3.13
+PYBIND11_PYTHON_EXECUTABLE_LAST:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.11/bin/python3.11
 //Python debug status
 PYTHON_IS_DEBUG:INTERNAL=0
 PYTHON_MODULE_DEBUG_POSTFIX:INTERNAL=
-PYTHON_MODULE_EXTENSION:INTERNAL=.cpython-313-darwin.so
+PYTHON_MODULE_EXTENSION:INTERNAL=.cpython-311-darwin.so
 _PYBIND11_CROSSCOMPILING:INTERNAL=OFF
 _Python:INTERNAL=Python
 //Compiler reason failure
 _Python_Compiler_REASON_FAILURE:INTERNAL=
-_Python_DEVELOPMENT_EMBED_SIGNATURE:INTERNAL=76275609fee6516108cd1ff598aebd17
-_Python_DEVELOPMENT_MODULE_SIGNATURE:INTERNAL=5599d53bf496ddd29e0dfcad35bdd2ff
+_Python_DEVELOPMENT_EMBED_SIGNATURE:INTERNAL=083c1241d27f42d2f98c6e3a4bdff64b
+_Python_DEVELOPMENT_MODULE_SIGNATURE:INTERNAL=095a8df1fc0956281c8f2d0e04a9ad86
 //Development reason failure
 _Python_Development_REASON_FAILURE:INTERNAL=
 //Path to a program.
-_Python_EXECUTABLE:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.13/bin/python3.13
+_Python_EXECUTABLE:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.11/bin/python3.11
 //Path to a file.
-_Python_INCLUDE_DIR:INTERNAL=/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13
+_Python_INCLUDE_DIR:INTERNAL=/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11
 //Python Properties
-_Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;13;5;64;<none>;cpython-313-darwin;abi3;/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/python3.13;/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/python3.13;/opt/homebrew/lib/python3.13/site-packages;/opt/homebrew/lib/python3.13/site-packages
-_Python_INTERPRETER_SIGNATURE:INTERNAL=1dee599c40c75bfe167d5ba9bcf99727
+_Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;11;13;64;<none>;cpython-311-darwin;abi3;/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/lib/python3.11;/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/lib/python3.11;/opt/homebrew/lib/python3.11/site-packages;/opt/homebrew/lib/python3.11/site-packages
+_Python_INTERPRETER_SIGNATURE:INTERNAL=3616e972edee7a4d178f056ce8ff971f
 //Path to a library.
-_Python_LIBRARY_RELEASE:INTERNAL=/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib
+_Python_LIBRARY_RELEASE:INTERNAL=/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/lib/libpython3.11.dylib
 //NumPy reason failure
 _Python_NumPy_REASON_FAILURE:INTERNAL=
 //Directories where pybind11 and possibly Python headers are located
-pybind11_INCLUDE_DIRS:INTERNAL=/opt/homebrew/include;/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13
+pybind11_INCLUDE_DIRS:INTERNAL=/opt/homebrew/include;/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11
 

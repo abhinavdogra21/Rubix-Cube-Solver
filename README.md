@@ -33,39 +33,45 @@ Open http://localhost:5173
 
 ### Prerequisites
 - **Node.js** 16+ and npm
-- **Python** 3.8+
+- **Python** 3.11+ (Required - The compiled C++ module is built for Python 3.11)
 - **CMake** 3.12+
 - **C++ Compiler** (GCC, Clang, or MSVC)
 
 ### macOS Setup
 ```sh
-# Install prerequisites
+# Install prerequisites (Python 3.11 is required!)
 xcode-select --install
-brew install cmake python3 node
+brew install cmake python@3.11 node
 
 # Clone and build
 git clone https://github.com/abhinavdogra21/Rubix-Cube-Solver.git
 cd Rubix-Cube-Solver
 npm install
 
-#Clean up all cache and build artifacts (recommended before every fresh build):
+# Clean up all cache and build artifacts (recommended before every fresh build):
 rm -rf cache
 rm -rf backend/build
 rm -rf backend/kociemba_api/build
 rm -rf backend/kociemba_api/src/solver/cache
 find . -name "kociemba_solver*.so" -delete
-#Build Backend
+
+# Build Backend
 cd backend
 rm -rf build
 mkdir build && cd build
 cmake ..
 make -j$(sysctl -n hw.ncpu)
+
 # Copy the built Python module to where main.py expects it
 cp kociemba_solver*.so ../kociemba_api/src/
+
+# Setup Python environment (IMPORTANT: Use Python 3.11!)
 cd ../kociemba_api
-python3 -m venv venv
+python3.11 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
+# Start backend
 cd src
 python main.py
 ```
@@ -80,7 +86,8 @@ Frontend: http://localhost:5173
 
 ### Windows Setup
 ```cmd
-# Prerequisites: Install Visual Studio 2019+ with C++ tools, Python 3.8+, Node.js 16+, CMake
+# Prerequisites: Install Visual Studio 2019+ with C++ tools, Python 3.11+, Node.js 16+, CMake
+# IMPORTANT: Make sure to install Python 3.11 specifically!
 
 cd Rubix-Cube-Solver
 npm install
@@ -92,9 +99,9 @@ cmake .. -G "Visual Studio 16 2019"
 cmake --build . --config Release
 copy Release\kociemba_solver*.pyd ..\kociemba_api\src\kociemba_solver.so
 
-# Start backend
+# Start backend (Use Python 3.11!)
 cd ..\kociemba_api
-python -m venv venv
+py -3.11 -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 python src\main.py
@@ -144,7 +151,10 @@ The string follows this face order: U→R→F→D→L→B, with each face in rea
 ## 🐛 Troubleshooting
 
 ### Common Issues
-- **Backend Not Starting**: Ensure Python 3.8+, port 5001 is free, C++ library built correctly
+- **Backend Not Starting**: Ensure Python 3.11+ (not 3.8 or 3.9!), port 5001 is free, C++ library built correctly
+- **"No module named 'kociemba_solver'"**: Python version mismatch - ensure you're using Python 3.11
+- **Virtual Environment Issues**: Delete venv folder and recreate with `python3.11 -m venv venv`
+- **Package Installation Errors**: Some packages require Python 3.10+ - ensure you're using Python 3.11
 - **Frontend Build Errors**: Delete `node_modules`, run `npm install` again
 - **C++ Compilation Errors**: Ensure CMake and compatible compiler installed
 - **pybind11 Issues**: Install via `brew install pybind11` (macOS) or `pip install pybind11`
@@ -155,8 +165,38 @@ If you encounter build issues, clean everything first:
 rm -rf node_modules package-lock.json
 rm -rf backend/build
 rm -rf backend/kociemba_api/build
+rm -rf backend/kociemba_api/venv
 find . -name "*.so" -delete
 find . -name "__pycache__" -delete
+```
+
+### Python Version Issues
+The most common issue is Python version mismatch. The compiled C++ module requires Python 3.11:
+
+**Check your Python version:**
+```sh
+python3.11 --version  # Should show Python 3.11.x
+```
+
+**If you don't have Python 3.11:**
+```sh
+# macOS
+brew install python@3.11
+
+# Ubuntu/Debian
+sudo apt install python3.11 python3.11-venv
+
+# Windows
+# Download from python.org and install Python 3.11
+```
+
+**Recreate virtual environment with correct Python:**
+```sh
+cd backend/kociemba_api
+rm -rf venv
+python3.11 -m venv venv  # Use python3.11 specifically!
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ### CMake Issues
